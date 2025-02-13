@@ -11,13 +11,12 @@
 1. [Log in to Confluent Cloud](#step-1)
 1. [Create an Environment and Cluster](#step-2)
 1. [Create an API Key Pair](#step-3)
-1. [Enable Schema Registry](#step-4)
-1. [Set up Postgres CDC source connector](#step-5)
-1. [Insert Records to the Database](#step-6)
-1. [Create Schema for database](#step-7)
-1. [Set up Postgres sink connector](#step-8)
-1. [Observe Real-time data streaming to destination database](#step-9)
-1. [Confluent Resources and Further Testing](#step-10)
+1. [Set up Postgres CDC source connector](#step-4)
+1. [Insert Records to the Database](#step-5)
+1. [Create Schema for database](#step-6)
+1. [Set up Postgres sink connector](#step-7)
+1. [Observe Real-time data streaming to destination database](#step-8)
+1. [Confluent Resources and Further Testing](#step-9)
 
 ***
 
@@ -113,22 +112,7 @@ An environment contains clusters and its deployed components such as Connectors,
 3. Select **My Account**, then click Next. Give it a description and click **Download and continue**
 4. Save your API key and secret - you will need these during the workshop.
 
-## <a name="step-4"></a>**Enable Schema Registry**
-
-A topic contains messages, and each message is a key-value pair. The message key or the message value (or both) can be serialized as JSON, Avro, or Protobuf. A schema defines the structure of the data format. 
-
-Confluent Cloud Schema Registry is used to manage schemas and it defines a scope in which schemas can evolve. It stores a versioned history of all schemas, provides multiple compatibility settings, and allows schemas to evolve according to these compatibility settings. It is also fully-managed.
-
-You will be exploring Confluent Cloud Schema Registry in more detail towards the end of the workshop. First, you will need to enable Schema Registry within your environment.
-
-1. Return to your environment by clicking on the Confluent icon at the top left corner and then clicking your environment tile.
-  <div align="center">
-      <img src="images/sr-cluster.png" width=75% height=75%>
-  </div>
-
-2. Click on **Data Contracts**. Select your cloud provider and region, and then click on **Enable Schema Registry**.
-
-## <a name="step-5"></a>**Set up Postgres CDC source connector**
+## <a name="step-4"></a>**Set up Postgres CDC source connector**
 
 Let’s say you have a database. How do you connect these data systems to your architecture?
 
@@ -179,7 +163,7 @@ View the connector, its status, and metrics on the **Connectors** page.
 	<img src="images/connector-page.png" width=75% height=75%>
 </div>
 
-## <a name="step-6"></a>**Insert Records to the Database**
+## <a name="step-5"></a>**Insert Records to the Database**
 Here, we will be inserting new records to the database
 1. Go to the website: https://real-time-data-integration-6y61.vercel.app/
 2. Click on **Insert Product Records** button.
@@ -188,13 +172,13 @@ Here, we will be inserting new records to the database
 5. Now go back to the Confluent Cloud and click on **Topics** in the left sidebar menu.
 6. You can notice on new topic got created: **db_public_products** click on the same and view the messages in the topic.
 
-## <a name="step-7"></a>**Create Schema for database**
+## <a name="step-6"></a>**Create Schema for database**
 Here, we will be creating a database schema to use it in the sink connector we will configure later.
 1. Click on the link- https://real-time-data-integration-6y61.vercel.app/
 2. Click on Create Schema. Use the database name created earlier as the schema name and click create.
 3. Click on *Refresh Records** multiple times to see the data in the target database schema.
 
-## <a name="step-8"></a>**Set up Postgres sink connector**
+## <a name="step-7"></a>**Set up Postgres sink connector**
 1. Click on **Connectors**, then **+Add Connector** and search for **Postgres sink** in the search bar.
    <div align="center">
       <img src="images/connector-source.png" width=75% height=75%>
@@ -220,7 +204,7 @@ Here, we will be creating a database schema to use it in the sink connector we w
       <img src="images/connector-staus-pg.png" width=75% height=75%>
   </div>
    	 
- ## <a name="step-9"></a>**Observe Real-time data streaming to destination database**
+ ## <a name="step-8"></a>**Observe Real-time data streaming to destination database**
   Now that the connectors are configured, 
   1. Go to the site- https://real-time-data-integration-6y61.vercel.app/ and click **Refresh Records**. This will reflect all the previously added records in the source database reflecting on the target database as well.
   2. Click on **Edit** button the source database record and modify any of the values and click on **Save Changes**.
@@ -231,7 +215,7 @@ Here, we will be creating a database schema to use it in the sink connector we w
 
 
 
-## <a name="step-10"></a>**Confluent Resources and Further Testing**
+## <a name="step-9"></a>**Confluent Resources and Further Testing**
 
 * [Confluent Cloud Documentation](https://docs.confluent.io/cloud/current/overview.html)
 
