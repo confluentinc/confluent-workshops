@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products - Shop</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h2>Welcome to the Product Store</h2>
+    <p>Logged in as: {{ email }}</p>
+    <a href="/cart?email={{ email }}">View Cart</a>
+    {% if is_admin %}
+        | <a href="/admin?email={{ email }}">Add Products</a>
+    {% endif %}
+    | <a href="/logout">Logout</a>
+    {% if not is_admin %}
+        | <a href="/delete-account?email={{ email }}">Delete Account</a>
+    {% endif %}
+        | <a href="/analytics?email={{ email }}">Analytics</a>
+    <hr>
+
+    <h3>All Products</h3>
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product-item" onclick="showProductModal(
+                {{ product.id|int }},
+                '{{ product.name }}',
+                '{{ product.image }}',
+                '{{ product.type }}',
+                {{ product.price|float }},
+                {{ product.quantity|int }}
+            )">
+                <h3>{{ product.name }}</h3>
+                <img src="{{ product.image }}" alt="{{ product.name }}" width="150" height="150">
+                <p>Type: {{ product.type }}</p>
+                <p>Price: ${{ product.price }}</p>
+                <p>Available: {{ product.quantity }}</p>
+
+                {% if product.quantity > 0 %}
+                    <form method="post" action="/cart/add" onclick="event.stopPropagation();">
+                        <input type="hidden" name="email" value="{{ email }}">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <label>Quantity:</label>
+                        <input type="number" name="quantity" min="1" max="{{ product.quantity }}" value="1" style="width: 100%; padding: 6px;">
+                        <button type="submit">Add to Cart</button>
+                    </form>
+                {% else %}
+                    <p style="color: red;"><strong>Out of Stock</strong></p>
+                {% endif %}
+
+                {% if is_admin %}
+                    <form method="get" action="/admin/edit" onclick="event.stopPropagation();">
+                        <input type="hidden" name="email" value="{{ email }}">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form method="post" action="/admin/delete" onclick="event.stopPropagation();" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                        <input type="hidden" name="email" value="{{ email }}">
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <button type="submit" style="background-color: red; color: white;">Delete</button>
+                    </form>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <h3>Trending Products</h3>
+    <div id="trending-loading" style="display:none; font-style: italic;">Refreshing trending products...</div>
+    <div id="trending-products" class="product-list" style="display: flex; gap: 20px; flex-wrap: nowrap; overflow-x: auto;">
+        <!-- Dynamically filled via JS -->
+    </div>
+
+    <script>
+    const trendingKey = "cachedTrendingProducts";
+    const userEmail = "{{ email }}";
+
+    function renderTrending(products) {
+        const container = document.getElementById("trending-products");
+        container.innerHTML = "";
+        products.forEach(product => {
+            const div = document.createElement("div");
+            div.className = "product-card";
+            div.style = "width: 200px; border: 1px solid #ccc; padding: 10px; text-align: center; background-color: white; border-radius: 6px;";
+            div.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" width="150" height="150">
+                <h4>${product.name}</h4>
+                <p>Type: ${product.type}</p>
+                <p>Price: $${product.price}</p>
+                <p>Available: ${product.quantity}</p>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function loadCachedTrending() {
+        const cached = localStorage.getItem(trendingKey);
+        if (cached) {
+            try {
+                const data = JSON.parse(cached);
+                if (Array.isArray(data) && data.length > 0) {
+                    renderTrending(data);
+                }
+            } catch (e) {
+                console.error("Invalid cache format:", e);
+            }
+        }
+    }
+
+    async function fetchTrendingFromServer() {
+        document.getElementById("trending-loading").style.display = "block";
+        try {
+            const res = await fetch(`/trending?email=${encodeURIComponent(userEmail)}`);
+            if (!res.ok) throw new Error("Fetch failed");
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+                localStorage.setItem(trendingKey, JSON.stringify(data));
+                renderTrending(data);
+            }
+        } catch (err) {
+            console.error("Failed to update trending from server:", err);
+        } finally {
+            document.getElementById("trending-loading").style.display = "none";
+        }
+    }
+
+    loadCachedTrending();
+    fetchTrendingFromServer();
+    setInterval(fetchTrendingFromServer, 60000);
+    </script>
+
+    <h3>Suggestions for You</h3>
+    <div id="suggestions-loading" style="display:none; font-style: italic;">Refreshing suggestions...</div>
+    <div id="suggestions" class="product-list" style="display: flex; gap: 20px; flex-wrap: nowrap; overflow-x: auto;">
+        <!-- Filled dynamically -->
+    </div>
+
+    <div id="productModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span onclick="closeModal()" class="close">&times;</span>
+            <h3 id="modalName"></h3>
+            <img id="modalImage" src="" width="200">
+            <p><strong>Type:</strong> <span id="modalType"></span></p>
+            <p><strong>Price:</strong> $<span id="modalPrice"></span></p>
+            <p><strong>Available:</strong> <span id="modalQuantity"></span></p>
+        </div>
+    </div>
+
+    <script>
+    function showProductModal(productId, name, image, type, price, quantity) {
+        document.getElementById('modalName').innerText = name;
+        document.getElementById('modalImage').src = image;
+        document.getElementById('modalType').innerText = type;
+        document.getElementById('modalPrice').innerText = price;
+        document.getElementById('modalQuantity').innerText = quantity;
+        document.getElementById('productModal').style.display = 'block';
+
+        fetch("/track-click", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                email: userEmail,
+                product_id: parseInt(productId, 10)
+            })
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('productModal').style.display = 'none';
+    }
+    </script>
+
+    <script>
+    const suggestionsKey = "cachedSuggestions";
+
+    function renderSuggestions(products) {
+        const container = document.getElementById("suggestions");
+        container.innerHTML = "";
+        products.forEach(product => {
+            const div = document.createElement("div");
+            div.className = "product-card";
+            div.style = "width: 200px; border: 1px solid #ccc; padding: 10px; text-align: center; background-color: white; border-radius: 6px;";
+            div.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" width="150" height="150">
+                <h4>${product.name}</h4>
+                <p>Type: ${product.type}</p>
+                <p>Price: $${product.price}</p>
+                <p>Available: ${product.quantity}</p>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    function loadCachedSuggestions() {
+        const cached = localStorage.getItem(suggestionsKey);
+        if (cached) {
+            try {
+                const data = JSON.parse(cached);
+                if (Array.isArray(data) && data.length > 0) {
+                    renderSuggestions(data);
+                }
+            } catch (e) {
+                console.error("Invalid suggestions cache:", e);
+            }
+        }
+    }
+
+    async function fetchSuggestionsFromServer() {
+        document.getElementById("suggestions-loading").style.display = "block";
+        try {
+            const res = await fetch(`/suggestions?email=${encodeURIComponent(userEmail)}`);
+            if (!res.ok) throw new Error("Fetch failed");
+            const data = await res.json();
+            if (Array.isArray(data) && data.length > 0) {
+                localStorage.setItem(suggestionsKey, JSON.stringify(data));
+                renderSuggestions(data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch suggestions:", err);
+        } finally {
+            document.getElementById("suggestions-loading").style.display = "none";
+        }
+    }
+
+    // Run both on load
+    loadCachedSuggestions();        // show from cache
+    fetchSuggestionsFromServer();  // fetch fresh from server
+    setInterval(fetchSuggestionsFromServer, 10000);  // refresh every 60 seconds
+    </script>
+
+
+</body>
+</html>

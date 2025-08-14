@@ -1,0 +1,99 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+
+# FastAPI
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# SQLAlchemy
+*.db
+*.sqlite3
+*.sqlite
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local development settings
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Alembic
+alembic/versions/*.py
+!alembic/versions/.gitkeep
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+
+# Secrets
+secrets/
+
+# Documentation
+docs/_build/
+site/
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local 
+*.properties

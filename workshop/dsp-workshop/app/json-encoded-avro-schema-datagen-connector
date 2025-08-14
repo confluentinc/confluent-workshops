@@ -1,0 +1,36 @@
+{
+  "type": "record",
+  "name": "ProductViewRecord",
+  "namespace": "product_views",
+  "fields": [
+    {
+      "name": "email",
+      "type": {
+        "type": "string",
+        "arg.properties": {
+          "options": [
+            "datagen1@gmail.com",
+            "datagen2@gmail.com",
+            "datagen3@gmail.com",
+            "datagen4@gmail.com",
+            "datagen5@gmail.com",
+            "datagen6@gmail.com",
+            "datagen7@gmail.com",
+            "datagen8@gmail.com",
+            "datagen9@gmail.com",
+            "datagen10@gmail.com"
+          ]
+        }
+      }
+    },
+    {
+      "name": "product_id",
+      "type": {
+        "type": "int",
+        "arg.properties": {
+          "options": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        }
+      }
+    }
+  ]
+}
