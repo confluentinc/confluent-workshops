@@ -95,5 +95,4 @@ site/
 .env.local
 .env.development.local
 .env.test.local
-.env.production.local 
-*.properties
+.env.production.local

@@ -50,15 +50,19 @@ If you are using AWS Workshpace provided by Confluent, the CloudFormation stack 
 
 Once you launch the AWS Workspace studio provided by Confluent, 
 1. Click on Open AWS Console
+
 ![alt text](<images/OpenAWSConsole.png>)
 
 2. After opening the AWS Console, Search for Cloudformation in Search bar and Open Cloudformation workspace.
+
 ![alt text](images/cloudformation.png)
 
 3. Open workshop-setup stack 
+
 ![alt text](images/workshop-setup-cloud-formation.png)
 
-4. Open Output tab to access the details for updating .properties file
+4. Open Output tab to access the details for updating `.properties` file
+
 ![alt text](images/awsresourcecreds.png)
 
 ## Optional: For Personal AWS Account Users
