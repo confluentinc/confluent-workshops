@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart - Shop</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h2>Your Shopping Cart</h2>
+    <p>Logged in as: {{ email }}</p>
+    <a href="/products?email={{ email }}">← Back to Products</a>
+
+    <hr>
+
+    {% if cart|length == 0 %}
+        <p>Your cart is empty.</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Subtotal</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set total = 0 %}
+                {% for item in cart %}
+                    <tr>
+                        <td>{{ item.product_name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ '%.2f' % item.price }}</td>
+                        <td>${{ '%.2f' % (item.price * item.quantity) }}</td>
+                        <td>
+                            <form method="post" action="/cart/remove" style="display:inline;">
+                                <input type="hidden" name="email" value="{{ email }}">
+                                <input type="hidden" name="cart_id" value="{{ item.id }}">
+                                <button type="submit">Remove</button>
+                            </form>
+                        </td>
+                        {% set total = total + (item.price * item.quantity) %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>
