@@ -85,7 +85,6 @@ coverage.xml
 
 # Secrets
 secrets/
-*.properties
 
 # Documentation
 docs/_build/
