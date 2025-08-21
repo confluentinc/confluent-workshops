@@ -1,49 +1,261 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Cart - Shop</title>
+    <title>Your Cart - DSP Shop</title>
     <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .navbar-brand {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
+        .navbar-greeting {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .navbar-nav {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.products {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .nav-link.products:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .nav-link.analytics {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-color: #ff6b6b;
+        }
+        
+        .nav-link.analytics:hover {
+            background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.logout {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .nav-link.logout:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .page-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .cart-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .cart-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e1e5e9;
+        }
+        
+        .cart-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .remove-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .total-row {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .total-row td {
+            font-size: 18px;
+            color: #333;
+        }
+        
+        /* Cart Actions */
+        .cart-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px;
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 2px solid #e1e5e9;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+            transform: translateY(-2px);
+        }
+    </style>
 </head>
 <body>
-    <h2>Your Shopping Cart</h2>
-    <p>Logged in as: {{ email }}</p>
-    <a href="/products?email={{ email }}">← Back to Products</a>
+    <!-- Beautiful Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="products?email={{ email }}&name={{ name }}" class="navbar-brand">🛍️ DSP Shop</a>
+            <div class="navbar-greeting">Hello, {{ name }}! 👋</div>
+            <div class="navbar-nav">
+                <a href="/products?email={{ email }}&name={{ name }}" class="nav-link products">🏠 Products</a>
+                <a href="/analytics?email={{ email }}" class="nav-link analytics">📊 Analytics</a>
+                <a href="/logout" class="nav-link logout">🚪 Logout</a>
+            </div>
+        </div>
+    </nav>
 
-    <hr>
+    <div class="main-content">
+        <h2 class="page-title">Your Shopping Cart</h2>
 
-    {% if cart|length == 0 %}
-        <p>Your cart is empty.</p>
-    {% else %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% set total = 0 %}
-                {% for item in cart %}
+        {% if cart|length == 0 %}
+            <div class="empty-cart">
+                <p>🛒 Your cart is empty.</p>
+                <p>Start shopping to add some amazing products!</p>
+            </div>
+        {% else %}
+            <table class="cart-table">
+                <thead>
                     <tr>
-                        <td>{{ item.product_name }}</td>
-                        <td>{{ item.quantity }}</td>
-                        <td>${{ '%.2f' % item.price }}</td>
-                        <td>${{ '%.2f' % (item.price * item.quantity) }}</td>
-                        <td>
-                            <form method="post" action="/cart/remove" style="display:inline;">
-                                <input type="hidden" name="email" value="{{ email }}">
-                                <input type="hidden" name="cart_id" value="{{ item.id }}">
-                                <button type="submit">Remove</button>
-                            </form>
-                        </td>
-                        {% set total = total + (item.price * item.quantity) %}
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
+                        <th>Action</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+                </thead>
+                <tbody>
+                    {% for item in cart %}
+                        {% set subtotal = item['price'] * item['quantity'] %}
+                        <tr>
+                            <td><strong>{{ item['product_name'] }}</strong></td>
+                            <td>{{ item['quantity'] }}</td>
+                            <td>${{ '%.2f' % item['price'] }}</td>
+                            <td>${{ '%.2f' % subtotal }}</td>
+                            <td>
+                                <form method="post" action="/cart/remove" style="display:inline;">
+                                    <input type="hidden" name="email" value="{{ email }}">
+                                    <input type="hidden" name="name" value="{{ name }}">
+                                    <input type="hidden" name="cart_id" value="{{ item['id'] }}">
+                                    <button type="submit" class="remove-button">🗑️ Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="total-row">
+                        <td colspan="3"><strong>Total:</strong></td>
+                        <td><strong>${{ '%.2f' % cart_total }}</strong></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+                
+                <div class="cart-actions">
+                    <a href="/products?email={{ email }}&name={{ name }}" class="btn-secondary">🛍️ Continue Shopping</a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <script>
+        function checkout() {
+            alert('Checkout functionality coming soon! 🚀');
+        }
+        </script>
+    </div>
 </body>
 </html>
