@@ -85,7 +85,7 @@ Once you launch the AWS Workspace studio provided by Confluent,
 3. Open workshop-setup stack 
 ![alt text](images/workshop-setup-cloud-formation.png)
 
-4. Open Output tab to access the details for updating .properties file
+4. Open Output tab to access the details for updating .properties file on the 8th Step.
 ![alt text](images/awsresourcecreds.png)
 
 ## Optional: For Personal AWS Account Users
@@ -146,7 +146,7 @@ In S3 Console, create two buckets:
   Name: `dsp-confluent-tableflow-<your-aws-account-id>`  
   Region: same
 
-Once your resources are ready, use their values in the `psqlclient.properties` and `aws.properties` files.
+Once your resources are ready, use their values in the `psqlclient.properties` and `aws.properties` files on the 8th step.
 </details>
 </div>
 
@@ -194,12 +194,12 @@ Note : When you sign up for a Confluent Cloud account, you will get free credits
    ![Environment Creation](images/environment.png)
 2. Create a **Standard Kafka Cluster** in your nearest region
    ![Kafka Cluster](images/cluster.png)
-3. Generate **API Keys** and update the values in `client.properties`
+3. Generate **API Keys** and update the values in `client.properties` on the 8th step.
 #### Steps to Create API Keys
 - Go to the **API Keys** section.
 - Select **"My Account"** for generating the API keys.
    ![API Key Selection](images/api_key.png)
-- Download the **API Key** and **Secret**, to update them in your `client.properties` file (All required values will be present in client.properties).
+- Download the **API Key** and **Secret**. We will use these values later to update the `client.properties` file during the configuration setup step.
    ![API Key Values](images/api_keys_key_value.png)
 
 ## 6. Flink Setup
@@ -513,7 +513,7 @@ Edit the `.properties` files with your credentials which would be available in t
 
 ```
 # PostgreSQL
-postgres.user=dspadmin
+postgres.user=admin_user
 postgres.password=<RDSPassword>
 postgres.host=<RDSDatabaseName>
 postgres.port=5432
@@ -556,7 +556,7 @@ athena.database=<cluster_id>
 athena.table=dsp_aggregated_aws_table
 ```
 
-* Create or Update `client.properties` file – Use API Keys and Bootstrap server details created in step-5. File which has been downloaded contains all the details to update client.properties
+* Create or Update `client.properties` file – Use API Keys and Bootstrap server details created in [Step-5](#5-create-confluent-cloud-environment-cluster-and-api-keys). File which has been downloaded contains all the details to update client.properties
 
 ```
 # Required connection configs for Kafka producer, consumer, and admin
