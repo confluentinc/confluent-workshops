@@ -85,6 +85,10 @@ coverage.xml
 
 # Secrets
 secrets/
+<<<<<<< HEAD
+=======
+*.properties
+>>>>>>> PLGCEE-322
 
 # Documentation
 docs/_build/
@@ -95,5 +99,9 @@ site/
 .env.local
 .env.development.local
 .env.test.local
+<<<<<<< HEAD
 .env.production.local 
 *.properties
+=======
+.env.production.local 
+>>>>>>> PLGCEE-322

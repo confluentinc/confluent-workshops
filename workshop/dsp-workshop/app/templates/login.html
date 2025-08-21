@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<<<<<<< HEAD
     <title>Login - Shop</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -15,5 +16,224 @@
 
         <button type="submit">Login</button>
     </form>
+=======
+    <title>Login - DSP Shop</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+        
+        .brand-header {
+            margin-bottom: 30px;
+        }
+        
+        .brand-logo {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .brand-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .brand-subtitle {
+            font-size: 16px;
+            color: #666;
+            font-weight: 300;
+        }
+        
+        .login-form {
+            text-align: left;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .login-button:active {
+            transform: translateY(0);
+        }
+        
+        .features {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e1e5e9;
+        }
+        
+        .features-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .feature-item {
+            padding: 8px 0;
+            color: #666;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .feature-icon {
+            color: #667eea;
+            font-size: 16px;
+        }
+        
+        .welcome-message {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .welcome-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .welcome-text {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="brand-header">
+            <div class="brand-logo">🛍️</div>
+            <div class="brand-title">DSP Shop</div>
+            <div class="brand-subtitle">Data Streaming Platform Workshop</div>
+        </div>
+        
+        <div class="welcome-message">
+            <div class="welcome-title">Welcome Back!</div>
+            <div class="welcome-text">Experience real-time product trends and personalized recommendations powered by streaming data</div>
+        </div>
+        
+        <form method="post" action="/login" class="login-form">
+            <div class="form-group">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required>
+            </div>
+            
+            <button type="submit" class="login-button">🚀 Get Started</button>
+        </form>
+        
+        <div class="features">
+            <div class="features-title">What you'll experience:</div>
+            <ul class="feature-list">
+                <li class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    Real-time trending products
+                </li>
+                <li class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    Personalized recommendations
+                </li>
+                <li class="feature-item">
+                    <span class="feature-icon">📊</span>
+                    Live analytics dashboard
+                </li>
+                <li class="feature-item">
+                    <span class="feature-icon">🔄</span>
+                    Real time data updates
+                </li>
+            </ul>
+        </div>
+    </div>
+>>>>>>> PLGCEE-322
 </body>
 </html>
