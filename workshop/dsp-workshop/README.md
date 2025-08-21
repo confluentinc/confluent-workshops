@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <p align="center">
   <img src="images/confluentlogo.png" alt="Logo" />
 </p>
@@ -24,20 +22,15 @@
 13. [Explore the Application](#13-explore-the-application)
 14. [Clean Up Resources After the Workshop](#14-clean-up-resources-after-the-workshop)
 
->>>>>>> PLGCEE-322
 ## Objective
 
 This project demonstrates how to build a **real-time data streaming application** powered by **Confluent Cloud**, leveraging its fully managed Kafka platform, Flink SQL-based stream processing and Tableflow integration capabilities. 
 
 This application powers real-time personalization and analytics for an e-commerce platform. It displays trending products based on live view counts, offers personalized suggestions by analyzing cart activity and recommending similar or lower-priced items, and provides an analytics dashboard with metrics like views, cart additions, and conversion rates. A streaming data pipeline ensures the UI and analytics stay updated instantly with user behavior.
 
-<<<<<<< HEAD
-![alt text](<images/DSP-Architecture.gif>)
-=======
 <p align="center">
   <img src="images/DSP-Architecture.gif" alt="Architecture" />
 </p>
->>>>>>> PLGCEE-322
 
 ### The solution uses several key services from **Confluent Cloud**:
 
@@ -69,16 +62,6 @@ All components are fully managed via Confluent Cloud, ensuring fast setup and mi
 
 ## Prerequisites
 Before you begin, ensure you have the following installed on your system:
-<<<<<<< HEAD
-- **Python 3** (latest stable version recommended)
-- **AWS CLI** (configured with appropriate credentials and region)
-
-<div style="border: 6px solid #555; padding: 16px; border-radius: 8px; margin: 16px 0;">
-<details> 
-<summary><strong>Steps for AWS Setup</strong></summary>
-<br>
-
-=======
 - **Python 3** (version 3.12 recommended) – [Download Python 3.12 here](https://www.python.org/downloads/release/python-3129/)
 
 <div style="border: 6px solid #555; padding: 16px; border-radius: 8px; margin: 16px 0;">
@@ -88,7 +71,6 @@ Before you begin, ensure you have the following installed on your system:
 
 ⚠️  Refer to the document here: [Steps to launch AWS Workspace and Get AWS Creds](https://docs.google.com/document/d/1eD0aB5W6TsAC2J77_KvBNIsTBZ7Ak7ZhOKWb_r2zzBA/edit?tab=t.0)
 
->>>>>>> PLGCEE-322
 If you are using AWS Workshpace provided by Confluent, the CloudFormation stack `workshop-prep-stack` has already been deployed for you.
 
 ## Retrieve Stack Outputs
@@ -171,30 +153,16 @@ Once your resources are ready, use their values in the `psqlclient.properties` a
 ## Application Setup Instructions
 
 
-<<<<<<< HEAD
-### 1. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd <repo-name>/app
-=======
 ## 1. Clone the Repository
 
 ```bash
 git clone https://github.com/confluentinc/confluent-workshops.git
 cd confluent-workshops/workshop/dsp-workshop
->>>>>>> PLGCEE-322
 ```
 
 ### 2. Set Up Python Environment
 
 ```bash
-<<<<<<< HEAD
-cd dsp-workshop
-```
-```bash
-=======
->>>>>>> PLGCEE-322
 python3 -m venv venv
 ```
 ```bash
@@ -204,16 +172,6 @@ source venv/bin/activate
 ### 3. Install Required Packages
 
 ```bash
-<<<<<<< HEAD
-pip3 install fastapi uvicorn jinja2 sqlalchemy psycopg2-binary confluent-kafka python-multipart boto3 pandas plotly
-```
-
----
-
-## Confluent Cloud Setup
-
-### 4. Sign UP to Confluent Cloud
-=======
 pip install -r requirements.txt
 ```
 
@@ -221,7 +179,6 @@ pip install -r requirements.txt
 ## Confluent Cloud Setup
 
 ## 4. Sign UP to Confluent Cloud
->>>>>>> PLGCEE-322
 
 To get started, you'll need an active **Confluent Cloud** account.
 
@@ -231,11 +188,7 @@ To get started, you'll need an active **Confluent Cloud** account.
 
 Note : When you sign up for a Confluent Cloud account, you will get free credits to use in Confluent Cloud. This will cover the cost of resources created during the workshop.
 
-<<<<<<< HEAD
-### 5. Create Infrastructure
-=======
 ## 5. Create Confluent Cloud Environment, Cluster and API Keys
->>>>>>> PLGCEE-322
 
 1. Create a new **Environment** in [Confluent Cloud](https://confluent.cloud)
    ![Environment Creation](images/environment.png)
@@ -249,49 +202,6 @@ Note : When you sign up for a Confluent Cloud account, you will get free credits
 - Download the **API Key** and **Secret**, to update them in your `client.properties` file (All required values will be present in client.properties).
    ![API Key Values](images/api_keys_key_value.png)
 
-<<<<<<< HEAD
----
-
-## Configuration
-
-### 6. Update Property Files
-
-Edit the following files and update them with your credentials, these files are present in `app` folder with `.properties` extension.
-
-* Update `psqlclient.properties`
-
-```
-# PostgreSQL
-postgres.user=<RDSUsername>
-postgres.password=<RDSPassword>
-postgres.host=<RDSInstanceEndpoint>
-postgres.db=<RDSDatabaseName>
-```
-Replace the values above with the ones returned by your describe-stacks output from AWS
-
-* Update `aws.properties` (For AWS Secret ID and Key, generate IAM user with admin permissions and update in aws.properties file)
-
-```
-aws.region=<Your AWS Region>
-aws.access_key_id=<Your AWS ACCESS KEY>
-aws.secret_access_key=<Your SECRET AWS ACCESS KEY>
-athena.output_location=s3://<AthenaBucketName>/
-athena.database=<your_confluent_cluster_id>         
-athena.table=<your_confluent_topic_name>         
-```
-Replace the values above with the ones returned by your describe-stacks output from AWS 
-
-* Update `client.properties` – Use API Keys and Bootstrap server details created in step-5. File which has been downloaded contains all the details to update client.properties
-
----
-
-## Run the Application
-
-### 7. Start FastAPI Server
-
-```bash
-uvicorn main:app --reload
-=======
 ## 6. Flink Setup
 
 ### Create Flink Compute Pool and Create Table
@@ -687,62 +597,26 @@ INFO:app.services.kafka_service:=== SUGGESTIONS CONSUMER LOOP STARTED for topic:
 INFO:app.services.kafka_service:Suggestions consumer thread started: 6246952960
 INFO:app.services.kafka_service:Started suggestions consumer for topic: personalized_suggestions
 INFO:app.services.kafka_service:Started separate consumers for trending topic: datagen_trending_products and suggestions topic: personalized_suggestions
->>>>>>> PLGCEE-322
 ```
 
 This will start the server on:
 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-<<<<<<< HEAD
----
-
-### 8. Add Products to Database
-=======
 > **Note:** At this stage, you don’t need to log in with any credentials. This step is only to ensure that the app launches successfully. You will log in properly later.
 
 ### Add Products to Database
->>>>>>> PLGCEE-322
 
 To populate the product table with sample data, run:
 
 * Open new tab in you terminal and go to dsp-workshop directory.
-<<<<<<< HEAD
-=======
 ```bash
 cd workshop/dsp-workshop
 ```
 
->>>>>>> PLGCEE-322
 * Activate the virtual environment
 ```bash
 source venv/bin/activate
 ```
-<<<<<<< HEAD
-```bash
-cd app
-```
-```bash
-python3 add-products.py
-```
-
----
-
-## Explore the Application (DSP is not enabled yet)
-
-You can now:
-
-* Log in to the application
-* View the product catalog
-* Try adding products to your cart
-
----
-
-## Confluent Cloud Components Setup
-
-### 9. Set Up Connectors
-
----
-=======
 
 ```bash
 python3 app/add-products.py
@@ -766,7 +640,6 @@ You can now:
 
 ## 10. Set Up Connectors
 
->>>>>>> PLGCEE-322
 
 ### CDC Source Connector (PostgreSQL)
 
@@ -804,11 +677,6 @@ Use the **Debezium PostgreSQL connector** to stream database changes into Kafka 
 9. Update the **Connector Name**.
 10. Click **Continue** and finally click **Create** to deploy the connector.
 
-<<<<<<< HEAD
-Once deployed, you can monitor the connector status and metrics from the **Connectors** tab.
-
----
-=======
 <details>
 <summary> 👈 Once your connector is deployed, you can check its status and monitor metrics to ensure it is working correctly. <strong><em>(click to expand)</strong></em></summary>
 
@@ -838,7 +706,6 @@ Once deployed, you can monitor the connector status and metrics from the **Conne
 > **Tip for beginners:** Regularly monitoring your connector helps catch issues early and ensures your data pipeline is running smoothly.
 </details>
 
->>>>>>> PLGCEE-322
 
 ### Datagen Connector
 
@@ -853,11 +720,7 @@ Use the **Datagen Source Connector** to simulate product view events in Kafka.
    ![Datagen Additional Config](images/datagen_connector_addtional_configuration.png)
 3. On the next page, create a topic named **`datagen_product_view`** with default configurations and select it for the connector.
 4. Click **Continue** and select **"Use an existing API Key"**. Provide your API key credentials.
-<<<<<<< HEAD
-5. Choose **"Provide your own schema"** and paste the following JSON schema:
-=======
 5. Choose **"Provide your own schema"** and paste the schema provided below. In Output record format choose `JSON_SR`:
->>>>>>> PLGCEE-322
    ![alt text](images/datagen_schema_connector.png)
    ```json
    {
@@ -893,40 +756,8 @@ Use the **Datagen Source Connector** to simulate product view events in Kafka.
 
 Once created, this connector will begin publishing simulated product view events to Kafka under the topic `datagen_product_view`.
 
-<<<<<<< HEAD
----
-
-## Flink Setup
-
-### 10. Create Flink Compute Pool and Run Queries
-
-Use Flink SQL to perform real-time analytics and transformations on your Kafka topics.
-
----
-
-### Steps to Create Flink Compute Pool
-
-1. Go to your **Confluent Cloud environment** and open the **Flink** tab.
-2. Click on **“Create Compute Pool”**.
-
-   ![Flink Compute Pool](images/flink_compute_pool.png)
-
-3. Select the **same region** as your Kafka cluster and click **Continue** to create the Flink Compute Pool.
-4. Wait for **2–3 minutes** until the compute pool is fully provisioned.
-5. Once the compute pool is ready, click on **“Open SQL Workspace”**.
-
-   ![Flink SQL Workspace Button](images/Flink_SQL_Workspace.png)
-
-6. In the SQL workspace:
-   - Ensure that the **correct Kafka cluster** is selected from the database dropdown.
-   - You can now start executing your Flink SQL queries.
-
-   ![Flink SQL Editor](images/flink_workspace.png)
-
-=======
 
 ## 11. Run Flink Queries
->>>>>>> PLGCEE-322
 
 #### Trending Products Table
 
@@ -942,10 +773,7 @@ CREATE TABLE datagen_trending_products (
 );
 ```
 ```sql
-<<<<<<< HEAD
-=======
 SET 'sql.state-ttl' = '1 HOURS';
->>>>>>> PLGCEE-322
 INSERT INTO datagen_trending_products
 SELECT
   CAST(product_id AS STRING) AS product_id,
@@ -953,32 +781,10 @@ SELECT
 FROM datagen_product_view
 GROUP BY product_id;
 ```
-<<<<<<< HEAD
-
-#### Aggregated AWS Table
-
-```sql
-CREATE OR REPLACE TABLE dsp_aggregated_aws_table (
-  product_id INT,
-  email STRING,
-  name STRING,
-  type STRING,
-  price DOUBLE,
-  quantity INT,
-  PRIMARY KEY (product_id) NOT ENFORCED
-) WITH (
-  'changelog.mode' = 'append',
-  'key.format' = 'json-registry',
-  'value.format' = 'json-registry'
-);
-```
-```sql
-=======
 > **Note:** Counts how many times each product has been viewed. The app uses this table to show the **Trending Products** section to users.
 
 ```sql
 SET 'sql.state-ttl' = '1 HOURS';
->>>>>>> PLGCEE-322
 INSERT INTO dsp_aggregated_aws_table
 SELECT
   v.product_id,
@@ -992,10 +798,7 @@ JOIN dsp_public_products p
   ON v.product_id = p.id
 WHERE p.__deleted = 'false';
 ```
-<<<<<<< HEAD
-=======
 > **Note:** Combines product metadata with user interactions (like views or purchases). This table is mainly used for analytics and backend processing; it is not directly visible in the UI.
->>>>>>> PLGCEE-322
 
 #### Cart with Email Table
 
@@ -1013,10 +816,7 @@ CREATE TABLE cart_with_email (
 );
 ```
 ```sql
-<<<<<<< HEAD
-=======
 SET 'sql.state-ttl' = '1 HOURS';
->>>>>>> PLGCEE-322
 INSERT INTO cart_with_email
 SELECT
   cu.email,
@@ -1030,10 +830,7 @@ WHERE c.__deleted = 'false'
   AND cu.__deleted = 'false'
   AND p.__deleted = 'false';
 ```
-<<<<<<< HEAD
-=======
 > **Note:** Links each user to the products currently in their cart. The app uses this table to populate the **Your Cart** view for each logged-in user.
->>>>>>> PLGCEE-322
 
 #### Personalized Suggestions Table
 
@@ -1049,10 +846,7 @@ CREATE TABLE personalized_suggestions (
 );
 ```
 ```sql
-<<<<<<< HEAD
-=======
 SET 'sql.state-ttl' = '1 HOURS';
->>>>>>> PLGCEE-322
 INSERT INTO personalized_suggestions
 SELECT
   user_email,
@@ -1091,78 +885,8 @@ FROM (
 WHERE rnk <= 2
 GROUP BY user_email;
 ```
-<<<<<<< HEAD
-
----
-
-## 11. Enable Tableflow Integration
-
-### Steps to Add Provider Integrations for AWS S3 and Glue
-
-1. Go to the **Tableflow** section in Confluent Cloud.  
-2. Click on **"Go To Provider Integration"**.
-   ![alt text](images/provider_integration.png)
-   ![alt text](images/add_provider_integration.png) 
-3. Click on **"Add Integrations"**.  
-4. Select **New Role** while adding the integration.
-![alt text](images/tableflow_new_role.png)
-5. Select **"Tableflow S3 Bucket"** in Confluent resource and **copy the permission policy JSON**.
-![alt text](images/TableflowS3.png) 
-6. Go to the **AWS Console** and **create a policy** using that JSON file. While creating the policy, update the **bucket name** in the permission policy JSON. Once done, click **Continue**.
-```
-IAM Console → Policies → Create Policy → (Visual Editor / JSON) : Update Bucket Names in JSON at 2 Places → Review & Create  
-```
-7. In the **AWS Console**, **create a Role** using the **trust-policy JSON** provided by Confluent Cloud UI and **attach the policy** created in step 6 to that role. 
-```
-IAM Console → Roles → Create Role → Select Trusted Entity → Attach Policie Created in Last Step → Review & Create
-``` 
-8. Copy the **ARN** for that role from the AWS Console and paste it in Confluent Cloud to **map the role**.  
-9. Provide an **integration name** and click **Continue**.  
-10. You will get a **new trust policy JSON**. Go back to the AWS Console and **update the trust policy** in the role under the **Trust Relationships** tab.  
-11. Click **Continue** and the integration will be added to your Tableflow.  
-12. Follow the **same steps (2–11)** for the **"Tableflow Glue Catalog Sync"** integration.
-![alt text](images/tableflow_glue_catalog_sync.png) 
-> _(Note: Update the **region** and **AWS account ID** while creating the policy for Glue.)_
-
----
-
-### Steps to Enable Tableflow for Topic
-
-13. Go to the `dsp_aggregated_aws_table` topic and click on **"Enable Tableflow"**.
-![alt text](images/enable_tableflow.png)
-14. Select **Iceberg** and click on **"Configure Custom Storage"**.
-![alt text](images/iceberg.png) 
-15. Select the **"dsp_workshop_s3_integration"** created in the previous steps and enter your **S3 bucket name**.
-![alt text](images/topic-tableflow-config.png)  
-16. Click **Continue**, review the details, and click **Launch**.
-
----
-
-### Steps for Glue Integration
-Now, create the Catalog Integration and link it to the Glue Provider Integration you just finished setting up.
-
--  In your **Confluent Cloud** console, navigate to your Environment -> **Tableflow**.
-![alt text](images/add_glue_catalog_int_image.png)
--  Scroll down to the **External Catalog Integration** section.
--  Click **+ Add Integration**.
--  For the integration type, select **AWS Glue** as the catalog.
--  Provide a **Name** for this catalog integration instance, for example, `my-glue-catalog-integration`.
--  In the section asking for the provider integration, **select the existing Glue Provider Integration** you created in the previous steps (e.g., `glue-provider-integration`) from the dropdown or list.
-![alt text](images/glue_catalog_int_1.png)
--  Review the overall configuration for the AWS Glue Catalog Integration.
--  Click **Launch** (or Continue/Create).
-
-### Verification (Glue Catalog)
-- Monitor the status of the Catalog Integration (my-glue-catalog-integration) in the Confluent Cloud Tableflow UI. It should transition to Connected or Running.
-![alt text](images/glue_verify_image.png)
-- Navigate to the AWS Glue Data Catalog service in your AWS Console.
-- Look for a new Database named after your Confluent Cloud Kafka Cluster ID (e.g., lkc-xxxxxx).
-- Inside that database, you should start seeing Tables appearing with names corresponding to the Kafka topics you enabled Tableflow for in Lab 3 (e.g., clicks, orders).
-- It might take a few minutes for the initial sync and table creation to occur.
-=======
 > **Note:** Stores recommended products for each user based on items in their cart and cheaper alternatives of the same type. This is intended to power the **Suggestions for You** section once Flink processes recommendations in later steps.
 
->>>>>>> PLGCEE-322
 
 ## 12. Explore the Stream Lineage
 In Confluent Cloud, Stream Lineage is a visual tool that provides an end-to-end view of how data flows through your Kafka environment, showing the relationships between producers, topics, stream processing applications, connectors, and consumers. It automatically maps the movement and transformation of data, enabling you to trace its origin, understand dependencies, and see where it’s headed. This helps with troubleshooting, impact analysis, and governance by making it easy to identify upstream and downstream systems, track changes, and ensure data is delivered as intended - all without manually building diagrams.
@@ -1187,8 +911,6 @@ Here, you’ll see an interactive map of your data pipelines, allowing you to cl
 ![alt text](<images/Analytics.png>)
 > If you're logging in again using the same browser, **clear your browser cache** to avoid stale data issues.
 
-<<<<<<< HEAD
-=======
 ## 14. Clean Up Resources After the Workshop
 
 Once you are done with the workshop, make sure to clean up your Confluent Cloud resources to avoid unnecessary charges.
@@ -1205,4 +927,3 @@ Once you are done with the workshop, make sure to clean up your Confluent Cloud 
    Delete the Kafka cluster you created for this workshop.
 6. **Delete the Environment**  
    Finally, remove the Confluent Cloud environment to ensure all associated resources are fully cleaned up.
->>>>>>> PLGCEE-322
