@@ -122,12 +122,19 @@ Install **Kafka command-line interface (CLI)** on your laptop without running a 
 
 ## Setup your Laptop
 
-1. Clone the repository onto your local development machine using `git clone https://github.com/confluentinc/XXXXXXXXXX.git`.
-2. Open a terminal window and change directory to the downloaded repository's terraform directory.
+1. Launch a command terminal window and clone the repository:
+
+    ```bash
+    git clone https://github.com/confluentinc/confluent-workshops.git
+    cd confluent-workshops/workshop/cluster_linking_osk_cc_private
+    ```
+    
+2. Change directory to the downloaded repository's terraform directory.
 
    ```
-   cd workshop-XXXXXXX-XXXXXXX/terraform
+   cd terraform
    ```
+   
 3. Steps to launch **AWS Workspace Studio** and get AWS credentials - Refer to the document [here](https://docs.google.com/document/d/1eD0aB5W6TsAC2J77_KvBNIsTBZ7Ak7ZhOKWb_r2zzBA/edit?tab=t.0)
 
    > ⚠️ **Note:**  If you already have the AWS CLI configured on your machine and pointing to the correct AWS account, you can skip this step.
