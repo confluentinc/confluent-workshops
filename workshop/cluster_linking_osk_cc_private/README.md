@@ -128,6 +128,7 @@ Install **Kafka command-line interface (CLI)** on your laptop without running a 
     git clone https://github.com/confluentinc/confluent-workshops.git
     cd confluent-workshops/workshop/cluster_linking_osk_cc_private
     ```
+    
 2. Change directory to the downloaded repository's terraform directory.
 
    ```
