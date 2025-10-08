@@ -128,10 +128,7 @@ Install **Kafka command-line interface (CLI)** on your laptop without running a 
     git clone https://github.com/confluentinc/confluent-workshops.git
     cd confluent-workshops/workshop/cluster_linking_osk_cc_private
     ```
-<<<<<<< HEAD
-=======
-    
->>>>>>> origin/master
+
 2. Change directory to the downloaded repository's terraform directory.
 
    ```
@@ -185,11 +182,7 @@ In this section, you will use a Terraform script to provision an OSK instance on
    terraform init
    ```
 
-<<<<<<< HEAD
-6. Deploy OSK using Terraform
-=======
-6. Deploy OSK using Terrform
->>>>>>> origin/master
+4. Deploy OSK using Terraform
 
    ```bash
    terraform apply --auto-approve
@@ -269,15 +262,15 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
 
    VII. Add the **Endpoint ID** to the Confluent Cloud Console -> Configure gateway -> Access point pane -> **VPC Endpoint ID from AWS** text field. </br>
    
-   IV. Enter the Access point name as **osk-access-point** and click **Create access point** button.
+   VIII. Enter the Access point name as **osk-access-point** and click **Create access point** button.
 
     <div align="center" padding=25px>
      <img src="images/cc_configure_gateway_2.png" width=50% height=50%>
     </div> 
 
-   VIII. Copy the **DNS Domain** text for setting up DNS configuration on AWS. Click Finish.</br>
+   IX. Copy the **DNS Domain** text for setting up DNS configuration on AWS. Click Finish.</br>
    
-   IX. Setting up DNS Configuration on AWS Console -> [Route 53](https://us-east-1.console.aws.amazon.com/route53/v2/home?region=us-east-1#GetStarted). Select **Create hosted zones** and click **Get Started** </br>
+   X. Setting up DNS Configuration on AWS Console -> [Route 53](https://us-east-1.console.aws.amazon.com/route53/v2/home?region=us-east-1#GetStarted). Select **Create hosted zones** and click **Get Started** </br>
 
         Create a Private Hosted Zone:
 
@@ -295,13 +288,13 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
      <img src="images/create_dns_04.png" width=50% height=70%>
     </div> 
 
-11. Make sure the **inbound_gateway** network configuration is in **Ready** state.
+10. Make sure the **inbound_gateway** network configuration is in **Ready** state.
 
     <div align="center" padding=25px>
      <img src="images/cc_network_state.png" width=50% height=50%>
     </div> 
 
-12. Click **Launch Cluster** button to launch the Enterprise Cluster.
+11. Click **Launch Cluster** button to launch the Enterprise Cluster.
 
 
 <br>
@@ -309,11 +302,7 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
 
 ## <a name="step-3"></a>Step 3: Explore the Confluent Cloud Enterprise Cluster
 
-<<<<<<< HEAD
 In this section, you will explore the Enterprise Cluster using the Web console and retrieve the cluster settings to be used later in the workshop.
-=======
-In this section, you will explore the Enterprise Cluster uaing the Web console and retrive the cluster settings to be used later in the workshop.
->>>>>>> origin/master
 
 1. Go to your Environment and click on the newly launched cluster.
 2. You see various option on the left. Click Cluster Overview option and subsequently click Cluster Settings.
@@ -329,20 +318,16 @@ In this section, you will explore the Enterprise Cluster uaing the Web console a
 
 ## <a name="step-4"></a>Step 4: Create an API Key Pair for Accessing the Confluent Cloud Enterprise Cluster
 
-<<<<<<< HEAD
 1. Switch to the Confluent Cloud Web console and navigate to the **Cluster Overview** section of your Enterprise Cluster.
-=======
-1. Swith to the Confluent Cloud Web console and navigate to the **Cluster Overview** section of your Enterprise Cluster.
->>>>>>> origin/master
 2. Click **API keys** on the left sidebar menu. 
-2. If this is your first API key within your cluster, click **Create key**. If you have set up API keys in your cluster in the past and already have an existing API key, click ** + Add key**.
+3. If this is your first API key within your cluster, click **Create key**. If you have set up API keys in your cluster in the past and already have an existing API key, click **+ Add key**.
    
     <div align="center" padding=25px>
        <img src="images/create_api_keys.png" width=50% height=50%>
     </div>
 
-3. Select **My Account**, then click Next. Give it a description and click **Download and continue**
-4. Save your API_KEY and API_SECRET - you will need these during the workshop.
+4. Select **My Account**, then click Next. Give it a description and click **Download and continue**
+5. Save your API_KEY and API_SECRET - you will need these during the workshop.
 
 <br>
 
@@ -511,11 +496,7 @@ To set up Cluster Linking, follow these steps:
 
     confluent kafka cluster use <ENTERPRISE_CLUSTER_ID>
     ```
-<<<<<<< HEAD
 5. Create a configuration file - `cluster_link.config` to create cluster linking. The configuration file is typically a simple key-value pair format, often structured as a Java properties file (i.e., one setting per line, with key=value). Each property defines a specific aspect of the cluster link, such as replication behavior, security credentials, inclusion/exclusion filters, and more.
-=======
-5. Creat a configuration file - `cluster_link.config` to create cluster linking. The configuration file is typically a simple key-value pair format, often structured as a Java properties file (i.e., one setting per line, with key=value). Each property defines a specific aspect of the cluster link, such as replication behavior, security credentials, inclusion/exclusion filters, and more.
->>>>>>> origin/master
 
     ```
     cat > cluster_link.config << EOF
@@ -542,11 +523,7 @@ To set up Cluster Linking, follow these steps:
 
     > ⚠️ **Note:** You can extract the <APACHE_KAFKA_CLUSTER_ID> by using the `kafka-cluster.sh cluster-id --bootstrap-server $KAFKA_PUBLIC_IP:9092` command. Make sure to replace the placeholders with their actual values.
 
-<<<<<<< HEAD
     Once the link is created successfully, you can see the following output:
-=======
-    Once the link is create successfully, you can see the following output:
->>>>>>> origin/master
 
     <div align="center" padding=25px>
        <img src="images/create_cluster_link.png" width=50% height=50%>
@@ -681,7 +658,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
     Press **Ctrl+C** to exit the producer.
 
-3. Consume the messages using the `kafka-console-consumer.sh` utility:
+2. Consume the messages using the `kafka-console-consumer.sh` utility:
 
     ```bash
     kafka-console-consumer.sh \
@@ -695,7 +672,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
     Make sure you see four messages. The one created on Confluent Kafka as well as OSK.
 
-6. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility: 
+3. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility: 
 
     ```bash
     kafka-consumer-groups.sh \
@@ -712,7 +689,7 @@ In this section, you will simulate a typical producer and consumer migration usi
     my-consumer-group test-topic      0          2               2               0       ...
     ```
 
-7. Consume only the new messages by specifying the consumer group.
+4. Consume only the new messages by specifying the consumer group.
 
     ```bash
     kafka-console-consumer.sh \
@@ -728,6 +705,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
 
 <br>
+
 
 ## <a name="step-10"></a>Step 10: Clean up the Resources
 
@@ -746,6 +724,7 @@ Make sure to delete all the resources created if you no longer wish to use the e
 
     terraform destroy --auto-approve
     ```
+
 3. Make sure to delete all the Confluent Cloud resources (Topics, Kafka cluster, Cluster Links) to save your credits.
 
 <br>
