@@ -181,7 +181,7 @@ In this section, you will use a Terraform script to provision an OSK instance on
    terraform init
    ```
 
-6. Deploy OSK using Terrform
+6. Deploy OSK using Terraform
 
    ```bash
    terraform apply --auto-approve
@@ -301,7 +301,7 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
 
 ## <a name="step-3"></a>Step 3: Explore the Confluent Cloud Enterprise Cluster
 
-In this section, you will explore the Enterprise Cluster uaing the Web console and retrive the cluster settings to be used later in the workshop.
+In this section, you will explore the Enterprise Cluster using the Web console and retrieve the cluster settings to be used later in the workshop.
 
 1. Go to your Environment and click on the newly launched cluster.
 2. You see various option on the left. Click Cluster Overview option and subsequently click Cluster Settings.
@@ -317,7 +317,7 @@ In this section, you will explore the Enterprise Cluster uaing the Web console a
 
 ## <a name="step-4"></a>Step 4: Create an API Key Pair for Accessing the Confluent Cloud Enterprise Cluster
 
-1. Swith to the Confluent Cloud Web console and navigate to the **Cluster Overview** section of your Enterprise Cluster.
+1. Switch to the Confluent Cloud Web console and navigate to the **Cluster Overview** section of your Enterprise Cluster.
 2. Click **API keys** on the left sidebar menu. 
 2. If this is your first API key within your cluster, click **Create key**. If you have set up API keys in your cluster in the past and already have an existing API key, click ** + Add key**.
    
@@ -495,7 +495,7 @@ To set up Cluster Linking, follow these steps:
 
     confluent kafka cluster use <ENTERPRISE_CLUSTER_ID>
     ```
-5. Creat a configuration file - `cluster_link.config` to create cluster linking. The configuration file is typically a simple key-value pair format, often structured as a Java properties file (i.e., one setting per line, with key=value). Each property defines a specific aspect of the cluster link, such as replication behavior, security credentials, inclusion/exclusion filters, and more.
+5. Create a configuration file - `cluster_link.config` to create cluster linking. The configuration file is typically a simple key-value pair format, often structured as a Java properties file (i.e., one setting per line, with key=value). Each property defines a specific aspect of the cluster link, such as replication behavior, security credentials, inclusion/exclusion filters, and more.
 
     ```
     cat > cluster_link.config << EOF
@@ -522,7 +522,7 @@ To set up Cluster Linking, follow these steps:
 
     > ⚠️ **Note:** You can extract the <APACHE_KAFKA_CLUSTER_ID> by using the `kafka-cluster.sh cluster-id --bootstrap-server $KAFKA_PUBLIC_IP:9092` command. Make sure to replace the placeholders with their actual values.
 
-    Once the link is create successfully, you can see the following output:
+    Once the link is created successfully, you can see the following output:
 
     <div align="center" padding=25px>
        <img src="images/create_cluster_link.png" width=50% height=50%>
