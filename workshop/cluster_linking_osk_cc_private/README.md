@@ -262,15 +262,15 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
 
    VII. Add the **Endpoint ID** to the Confluent Cloud Console -> Configure gateway -> Access point pane -> **VPC Endpoint ID from AWS** text field. </br>
    
-   IV. Enter the Access point name as **osk-access-point** and click **Create access point** button.
+   VIII. Enter the Access point name as **osk-access-point** and click **Create access point** button.
 
     <div align="center" padding=25px>
      <img src="images/cc_configure_gateway_2.png" width=50% height=50%>
     </div> 
 
-   VIII. Copy the **DNS Domain** text for setting up DNS configuration on AWS. Click Finish.</br>
+   IX. Copy the **DNS Domain** text for setting up DNS configuration on AWS. Click Finish.</br>
    
-   IX. Setting up DNS Configuration on AWS Console -> [Route 53](https://us-east-1.console.aws.amazon.com/route53/v2/home?region=us-east-1#GetStarted). Select **Create hosted zones** and click **Get Started** </br>
+   X. Setting up DNS Configuration on AWS Console -> [Route 53](https://us-east-1.console.aws.amazon.com/route53/v2/home?region=us-east-1#GetStarted). Select **Create hosted zones** and click **Get Started** </br>
 
         Create a Private Hosted Zone:
 
@@ -288,13 +288,13 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
      <img src="images/create_dns_04.png" width=50% height=70%>
     </div> 
 
-11. Make sure the **inbound_gateway** network configuration is in **Ready** state.
+10. Make sure the **inbound_gateway** network configuration is in **Ready** state.
 
     <div align="center" padding=25px>
      <img src="images/cc_network_state.png" width=50% height=50%>
     </div> 
 
-12. Click **Launch Cluster** button to launch the Enterprise Cluster.
+11. Click **Launch Cluster** button to launch the Enterprise Cluster.
 
 
 <br>
@@ -320,14 +320,14 @@ In this section, you will explore the Enterprise Cluster using the Web console a
 
 1. Switch to the Confluent Cloud Web console and navigate to the **Cluster Overview** section of your Enterprise Cluster.
 2. Click **API keys** on the left sidebar menu. 
-2. If this is your first API key within your cluster, click **Create key**. If you have set up API keys in your cluster in the past and already have an existing API key, click ** + Add key**.
+3. If this is your first API key within your cluster, click **Create key**. If you have set up API keys in your cluster in the past and already have an existing API key, click **+ Add key**.
    
     <div align="center" padding=25px>
        <img src="images/create_api_keys.png" width=50% height=50%>
     </div>
 
-3. Select **My Account**, then click Next. Give it a description and click **Download and continue**
-4. Save your API_KEY and API_SECRET - you will need these during the workshop.
+4. Select **My Account**, then click Next. Give it a description and click **Download and continue**
+5. Save your API_KEY and API_SECRET - you will need these during the workshop.
 
 <br>
 
@@ -658,7 +658,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
     Press **Ctrl+C** to exit the producer.
 
-3. Consume the messages using the `kafka-console-consumer.sh` utility:
+2. Consume the messages using the `kafka-console-consumer.sh` utility:
 
     ```bash
     kafka-console-consumer.sh \
@@ -672,7 +672,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
     Make sure you see four messages. The one created on Confluent Kafka as well as OSK.
 
-6. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility: 
+3. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility: 
 
     ```bash
     kafka-consumer-groups.sh \
@@ -689,7 +689,7 @@ In this section, you will simulate a typical producer and consumer migration usi
     my-consumer-group test-topic      0          2               2               0       ...
     ```
 
-7. Consume only the new messages by specifying the consumer group.
+4. Consume only the new messages by specifying the consumer group.
 
     ```bash
     kafka-console-consumer.sh \
@@ -705,6 +705,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
 
 <br>
+
 
 ## <a name="step-10"></a>Step 10: Clean up the Resources
 
@@ -723,6 +724,7 @@ Make sure to delete all the resources created if you no longer wish to use the e
 
     terraform destroy --auto-approve
     ```
+
 3. Make sure to delete all the Confluent Cloud resources (Topics, Kafka cluster, Cluster Links) to save your credits.
 
 <br>
