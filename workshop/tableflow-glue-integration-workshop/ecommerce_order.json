@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "EcommerceOrder",
+  "type": "object",
+  "properties": {
+    "order_id": { "type": "string" },
+    "order_date": { "type": "string", "format": "date-time" },
+    "delivery_date": { "type": "string", "format": "date-time" },
+    "customer_id": { "type": "string" },
+    "customer_location": { "type": "string" },
+    "product_id": { "type": "string" },
+    "product_name": { "type": "string" },
+    "category": { "type": "string" },
+    "quantity": { "type": "integer" },
+    "unit_price": { "type": "number" },
+    "supplier_id": { "type": "string" },
+    "supplier_name": { "type": "string" },
+    "warehouse_id": { "type": "string" },
+    "warehouse_location": { "type": "string" },
+    "status": { "type": "string" },
+    "return_flag": { "type": "boolean" },
+    "return_reason": { "type": ["string", "null"] },
+    "logistics_partner": { "type": "string" },
+    "logistics_cost": { "type": "number" },
+    "cogs": { "type": "number" },
+    "total_order_value": { "type": "number" },
+    "profit_margin": { "type": "number" }
+  },
+  "required": [
+    "order_id",
+    "order_date",
+    "delivery_date",
+    "customer_id",
+    "product_id",
+    "quantity",
+    "unit_price",
+    "status",
+    "total_order_value"
+  ]
+}
+

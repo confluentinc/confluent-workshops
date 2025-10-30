@@ -1,0 +1,14 @@
+uvicorn
+fastapi
+pandas
+boto3
+jinja2
+confluent_kafka
+attrs
+orjson
+httpx
+cachetools
+authlib
+referencing
+jsonschema
+faker

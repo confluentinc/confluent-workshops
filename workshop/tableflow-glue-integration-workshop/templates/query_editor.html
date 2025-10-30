@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analytics Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-2.24.1.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        h2, h3 { text-align: center; }
+        .chart-container { background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 30px; width: 100%; }
+        .chart-container h4 { text-align: center; margin-bottom: 10px; }
+        .query-editor { margin-top: 40px; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .query-input { width: 100%; height: 100px; font-family: monospace; padding: 10px; border-radius: 5px; border: 1px solid #ccc; }
+        .data-table { max-height: 400px; overflow-y: auto; margin-top: 20px; }
+        .data-table table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .data-table th { background: #f0f0f0; position: sticky; top: 0; }
+        #queryLoading { display: none; margin-left: 10px; font-style: italic; color: #555; }
+    </style>
+</head>
+<body>
+<h2>Analytics Dashboard</h2>
+
+{% for key, chart in charts.items() %}
+<div class="chart-container">
+    <h4>{{ key.replace('_',' ') | upper }}</h4>
+    <div id="{{ key }}" style="width:100%;height:500px;"></div>
+    <script>
+        const {{ key }}_data = {{ chart | tojson | safe }};
+        if ({{ key }}_data.data) {
+            Plotly.newPlot("{{ key }}", {{ key }}_data.data, {{ key }}_data.layout, {responsive:true});
+        }
+    </script>
+</div>
+{% endfor %}
+
+<div class="query-editor">
+    <h3>Query Editor</h3>
+    <textarea id="customQuery" class="query-input" placeholder="SELECT * FROM your_table LIMIT 10;"></textarea><br>
+    <button class="btn" onclick="executeCustomQuery()">Run Query</button>
+    <span id="queryLoading">Executing query...</span>
+    <div id="queryResults"></div>
+</div>
+
+<script>
+async function executeCustomQuery() {
+    const query = document.getElementById('customQuery').value.trim();
+    if (!query) return;
+    document.getElementById('queryLoading').style.display = 'inline';
+    const resultsDiv = document.getElementById('queryResults');
+    resultsDiv.innerHTML = '';
+    try {
+        const res = await fetch(`/api/query-data?query=${encodeURIComponent(query)}`);
+        const result = await res.json();
+        if (result.error) {
+            resultsDiv.innerHTML = `<div style="color:red">${result.error}</div>`;
+        } else if (result.data.length > 0) {
+            let html = '<div class="data-table"><table><thead><tr>';
+            result.columns.forEach(c => html += `<th>${c}</th>`); 
+            html += '</tr></thead><tbody>';
+            result.data.forEach(row => {
+                html += '<tr>';
+                result.columns.forEach(c => html += `<td>${row[c] || ''}</td>`);
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            resultsDiv.innerHTML = html;
+        } else {
+            resultsDiv.innerHTML = 'No results found';
+        }
+    } catch(e) {
+        resultsDiv.innerHTML = `<div style="color:red">${e.message}</div>`;
+    } finally {
+        document.getElementById('queryLoading').style.display = 'none';
+    }
+}
+
+// --- Auto-refresh all charts every 20 seconds ---
+async function refreshAllCharts() {
+    const chartKeys = {{ charts.keys() | list | tojson | safe }};
+    for (const key of chartKeys) {
+        try {
+            const res = await fetch(`/api/chart-data?chart=${key}`);
+            const chart = await res.json();
+            if (chart.data) {
+                Plotly.react(key, chart.data, chart.layout, {responsive:true});
+            }
+        } catch(e) {
+            console.error(`Error refreshing chart ${key}:`, e);
+        }
+    }
+}
+
+// Trigger every 20 seconds
+setInterval(refreshAllCharts, 20000);
+</script>
+</body>
+</html>
