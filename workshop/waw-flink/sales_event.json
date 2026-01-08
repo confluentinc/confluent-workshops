@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SalesEvent",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "event_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "units_sold": {
+      "type": "integer"
+    },
+    "region": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_timestamp",
+    "product_name",
+    "units_sold",
+    "region"
+  ]
+}
+

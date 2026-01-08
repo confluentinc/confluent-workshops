@@ -1,0 +1,85 @@
+body {
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b); /* deep navy gradient */
+  margin: 0;
+  padding: 0;
+  color: #f1f5f9;
+}
+
+/* Wider full-page container */
+.container {
+  width: 95%;
+  max-width: 1600px;
+  margin: 40px auto;
+  padding: 20px 40px;
+}
+
+h1 {
+  text-align: center;
+  color: #e2e8f0;
+  margin-bottom: 40px;
+  font-size: 2rem;
+}
+
+
+.charts-row {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 700px)) !important;
+  gap: 30px !important;
+  justify-content: center !important;
+}
+.dashboard-title {
+  color: #00bcd4;           /* cyan accent */
+  text-align: center;       /* optional */
+  font-weight: 700;         /* optional */
+  letter-spacing: 1px;      /* optional */
+}
+h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(90deg, #1712b7, #71bcee); /* violet → pink gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+
+
+.chart-container {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 20px 24px;
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Make charts equal size */
+.chart-container canvas {
+  width: 100% !important;
+  height: 540px !important;
+  border-radius: 12px;
+}
+
+/* Transparent glassy chart section */
+.chart-section {
+  flex: 1;
+  min-width: 500px;
+  background: rgba(255, 255, 255, 0.05); /* subtle transparent overlay */
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 20px 25px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.chart-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.8);
+}
+
+.chart-container h2 {
+  text-align: center;
+  color: #f8fafc;
+  margin-bottom: 20px;
+}
