@@ -41,19 +41,19 @@
 
 ## **Objective:**
 
-Welcome to "Seamlessly Connect Sources and Sinks to Confluent Cloud with Kafka Connect"! In this workshop, you will learn how to connect your external systems to Confluent Cloud using Connectors. Confluent offers 180+ pre-built connectors for you to start using today with no coding or developing required. To view the complete list of connectors from Confluent, please see [Confluent Hub](https://www.confluent.io/hub/).
+Welcome to “Seamlessly Connect Sources and Sinks to Confluent Cloud with Kafka Connect.”
+In this workshop, you’ll learn how to integrate external systems with Confluent Cloud using Connectors. Confluent provides 180+ pre-built, no-code connectors, all available on [Confluent Hub](https://www.confluent.io/hub/).
 
-Now, you'll cover what to do when you have other systems you want to pull data from or push data to. This can be anything from a database or data warehouse to object storage or a software application. You can easily connect these systems to Confluent Cloud using one of the pre-built connectors.
+You’ll explore how to connect data from various systems—whether it’s databases, data warehouses, object storage, or applications—directly to Confluent Cloud using these ready-to-use connectors.
 
-During the workshop, you will first set up your Confluent Cloud account, including creating your first cluster and setting up Schema Registry. 
+You’ll begin by setting up your Confluent Cloud account, creating your first Kafka cluster, and configuring Schema Registry.
 
-Next, you will set up and deploy 2 connectors: Fully-Managed.
+Next, you’ll deploy two Fully-Managed Connectors. These connectors run entirely in Confluent Cloud, require no infrastructure management, and offer an easy GUI-based setup with elastic scaling. We’ll walk through launching a fully-managed connector in the UI, with a note that the same can be done using the ```confluent``` CLI.
 
-* Fully-Managed Connectors are available as fully-managed and fully hosted in Confluent Cloud. With a simple GUI-based configuration and elastic scaling with no infrastructure to manage, these fully-managed connectors make moving data in and out of Confluent simple. You will be walking through how to launch a fully-managed connector in the UI. Note that it can also be launched using the ccloud CLI. 
+You will also gain a deeper understanding of Schema Registry—how it works, its role in ensuring data compatibility, and how to manage schemas within Confluent Cloud.
 
-You will also learn more about Schema Registry and how you can use it in Confluent Cloud to ensure data compatibility and to manage your schemas. 
+By the end of the workshop, you’ll know how to use fully-managed connectors to build and complete your data pipelines with ease.
 
-By the conclusion of the workshop, you will have learned how to leverage fully-managed connectors to complete your data pipeline!
 
 ## <a name="step-1"></a>**Log in to Confluent Cloud**
 1. Log in to [Confluent Cloud](https://confluent.cloud) and enter your email and password.
@@ -68,7 +68,7 @@ By the conclusion of the workshop, you will have learned how to leverage fully-m
 
 ## <a name="step-2"></a>**Create an Environment and Cluster**
 
-An environment contains clusters and its deployed components such as Connectors, ksqlDB, and Schema Registry. You have the ability to create different environments based on your company's requirements. Confluent has seen companies use environments to separate Development/Testing, Pre-Production, and Production clusters.
+An environment groups together your clusters and all associated components—such as Flink and Schema Registry. You can create multiple environments to align with your organization’s needs. Many companies use environments to clearly separate Development/Testing, Pre-Production, and Production clusters.
 
 1. Click **+ Add Environment**. Specify an **Environment Name** and Click **Create**. 
 
@@ -80,7 +80,7 @@ An environment contains clusters and its deployed components such as Connectors,
 
 2. Now that you have an environment, click **Create Cluster**. 
 
-    > **Note:** Confluent Cloud clusters are available in 3 types: Basic, Standard, and Dedicated. Basic is intended for development use cases so you will use that for the workshop. Basic clusters only support single zone availability. Standard and Dedicated clusters are intended for production use and support Multi-zone deployments. If you are interested in learning more about the different types of clusters and their associated features and limits, refer to this [documentation](https://docs.confluent.io/current/cloud/clusters/cluster-types.html).
+    > **Note:** Confluent Cloud clusters are available in 5 types: Basic, Standard, Enterprise, Freight, and Dedicated. Basic is intended for development use cases so you will use that for the workshop. Basic clusters only support single zone availability. Standard, Enterprise, Freight, and Dedicated clusters are intended for production use and support Multi-zone deployments. If you are interested in learning more about the different types of clusters and their associated features and limits, refer to this [documentation](https://docs.confluent.io/current/cloud/clusters/cluster-types.html).
 
 3. Choose the **Basic** Cluster Type. 
 
@@ -121,11 +121,12 @@ There are 2 options: <br>
 1. Develop your own connectors using the Kafka Connect framework (this requires a lot of development time and effort).  
 2. You can leverage the 180+ connectors Confluent offers out-of-the-box which allows you to configure your sources and sinks in a few, simple steps. To view the complete list of connectors that Confluent offers, please see [Confluent Hub](https://www.confluent.io/hub/).
 
-With Confluent’s connectors, your data systems can communicate with your services, completing your data pipeline. 
+Confluent connectors unify your services and data systems into a single, cohesive pipeline. 
 
-In today's use case, we will be provisioning a Postgres CDC source connector and Postgres sink connector. 
+Today, we are focusing on a Postgres CDC source-to-sink use case. 
 
-Now that you have completed setting up your Confluent Cloud account, cluster and Schema Registry, this next step will guide you how to configure a postgres connector in Confluent Cloud. 
+Since your cluster and Schema Registry are already set up, let’s move directly into configuring your Postgres connectors in the Confluent Cloud console.
+ 
 <br>
 1. Click on **Connectors**, then search for **Postgres CDC Source V2 (Debezium)** in the search bar.
    <div align="center">
@@ -133,28 +134,29 @@ Now that you have completed setting up your Confluent Cloud account, cluster and
   </div>
   
 2. This will redirect you to connector configuration page, select **Use an existing API Key** and provide API key credentials you created earlier.
-3. Next, go to the following website - https://real-time-data-integration-6y61.vercel.app/ and click **Create a Database** at the source database and give ```<name>_<random6char>``` Make note of this name.<br>
-4. Click on **Refresh Records** button few times to see that there are no records in the new database created.
-4. Come back to connectors page and click next. Enter the database details as provided in the workshop.
-5. Click continue. This will take a few moments.<br>
-6. In the configuration page, modify the following to the values below:<br>
-	1. Output record value format: JSON_SR<br>
- 	2. Output Kafka record key format: JSON_SR<br>
-  	3. Topic prefix: db<br>
-   	4. Slot name: <database_name>_debezium<br>
-    	5. Publication name: <database_name>_dbz_publication<br>
-        6. Click on **Show advances configurations**
-   	7. **After-state only: true** and scroll down<br>
-	8. Click on **Add SMT**. Configure the following:<br>
- 		1. Transform Type: TopicRegexRouter<br>
-  		2. Transformation Values:
+3. Next, open the web application URL (as shared by the instructor) and click **Create a Database** at the source database and give ```<name>_<random6char>``` Make note of this name.<br>
+4. Click the **Refresh Records** button in the web application a few times to confirm that your newly created database is currently empty.
+5. Come back to Confluent Cloud's Connectors page and click **Next**. Enter the database details as provided in the workshop.
+6. Click **continue**. This will take a few moments.
+7. In the configuration page, modify the following to the values below:<br>
+	a. Output record value format: **JSON_SR**<br>
+ 	b. Output Kafka record key format: **JSON_SR**<br>
+  	c. Topic prefix: **db**<br>
+   	d. Slot name: **<database_name>_debezium**<br>
+    e. Publication name: **<database_name>_dbz_publication**<br>
+    f. Click on **Show advances configurations** <br>
+   	g. After-state only: **true** <br>
+    h. Decimal Handling mode: **double** and scroll down<br>
+	i. Click on **Add SMT**. Configure the following:<br>
+ 		-- Transform Type: **TopicRegexRouter**<br>
+  		-- Transformation Values:
    		```regex: (.*)\.(.*)\.(.*), replacement: $1_$2_$3``` <br>
    <div align="center">
       <img src="images/conn-config-source.png" width=75% height=75%>
    </div><br>
-7. Click Next. Let the connector sizing remain as it is. Click to the next step.<br>
-8. Update the connector name to ```<database_name>_cdc```.
-10. Click Continue and create the connector.<br>
+8. Click **Next**. Let the connector sizing remain as it is. Click to the next step.<br>
+9. Update the connector name to ```<database_name>_cdc```.
+10. Click **Continue** and create the connector.<br>
 
 
 View the connector, its status, and metrics on the **Connectors** page.
@@ -164,18 +166,16 @@ View the connector, its status, and metrics on the **Connectors** page.
 </div>
 
 ## <a name="step-5"></a>**Insert Records to the Database**
-Here, we will be inserting new records to the database
-1. Go to the website: https://real-time-data-integration-6y61.vercel.app/
-2. Click on **Insert Product Records** button.
-3. Click on **Submit Records** button to insert these records to the database.
-4. Click on **Refresh Records** button to view the new records inserted.
-5. Now go back to the Confluent Cloud and click on **Topics** in the left sidebar menu.
-6. You can notice on new topic got created: **db_public_products** click on the same and view the messages in the topic.
+Here, you will be inserting new records to the database<br>
+1. Go to the web application URL and click the **Insert Product Records** button.
+2. Click on **Submit Records** button to insert new records in the database.
+3. Click on **Refresh Records** button to view the new records.
+4. Now go back to the Confluent Cloud and click on **Topics** option in the left sidebar menu.
+5. You can notice on new topic got created: **db_public_products** click on the same and view the messages in the topic.
 
 ## <a name="step-6"></a>**Create Schema for database**
-Here, we will be creating a database schema to use it in the sink connector we will configure later.
-1. Click on the link- https://real-time-data-integration-6y61.vercel.app/
-2. Click on Create Schema. Use the database name created earlier as the schema name and click create.
+Here, you will create a database schema to use it in the sink connector that you will configure later.
+1. Go to the web application URL and click **Create Schema**. Use the database name created earlier as the schema name and click **Create**.
 3. Click on *Refresh Records** multiple times to see the data in the target database schema.
 
 ## <a name="step-7"></a>**Set up Postgres sink connector**
@@ -189,14 +189,14 @@ Here, we will be creating a database schema to use it in the sink connector we w
 4. Next, in the database connection details, enter database details as provided in the workshop.
 5. Under configuration, set Input Kafka record value format as **JSON_SR** and Insert mode as **UPSERT**.
 6. In advanced configuration, modify the following:<br>
-	1. Auto create table: true<br>
- 	2. Auto add columns: true<br>
-  	3. Table name format: <schema_name>.${topic}
-   	4. PK mode: record_value
-	5. PK Fields: id
-7. Scroll down and click on **Add SMT**
- 	1. Transform type: TombstoneHandler
-	2. behaviour: ignore
+	-- Auto create table: **true**<br>
+ 	-- Auto add columns: **true**<br>
+  	-- Table name format: **<schema_name>.${topic}**<br> 
+   	-- PK mode: **record_value**<br>
+	-- PK Fields: **id**<br>
+7. Scroll down and click on **Add SMT** <br>
+ 	-- Transform type: **TombstoneHandler**<br>
+	-- behaviour: **ignore**<br>
 8. Click **Continue** and let the connector sizing remain as it is. Click **Continue**.
 9. Change the connector name to ```<schema_name>_sink```.
 10. Once done, click continue and wait for the sink connector to get provisioned. View the status as running in the connectors page.
@@ -206,26 +206,10 @@ Here, we will be creating a database schema to use it in the sink connector we w
    	 
  ## <a name="step-8"></a>**Observe Real-time data streaming to destination database**
   Now that the connectors are configured, 
-  1. Go to the site- https://real-time-data-integration-6y61.vercel.app/ and click **Refresh Records**. This will reflect all the previously added records in the source database reflecting on the target database as well.
+  1. Go to the site provided and click **Refresh Records**. This will reflect all the previously added records in the source database reflecting on the target database as well.
   2. Click on **Edit** button the source database record and modify any of the values and click on **Save Changes**.
   3. Click on **Refresh Records** to see the change happen in target database as well.
 
   
-    > **Note:** Make sure to delete all the resources created if you no longer wish to use the environment.
-
-
-
-## <a name="step-9"></a>**Confluent Resources and Further Testing**
-
-* [Confluent Cloud Documentation](https://docs.confluent.io/cloud/current/overview.html)
-
-* [Confluent Connectors](https://www.confluent.io/hub/) - A recommended next step after the workshop is to deploy a connector of your choice.
-
-* [Confluent Cloud Schema Registry](https://docs.confluent.io/cloud/current/client-apps/schemas-manage.html#)
-
-* [Best Practices for Developing Apache Kafka Applications on Confluent Cloud](https://assets.confluent.io/m/14397e757459a58d/original/20200205-WP-Best_Practices_for_Developing_Apache_Kafka_Applications_on_Confluent_Cloud.pdf) 
-
-* [Confluent Cloud Demos and Examples](https://docs.confluent.io/platform/current/tutorials/examples/ccloud/docs/ccloud-demos-overview.html)
-
-* [Kafka Connect Deep Dive – Error Handling and Dead Letter Queues](https://www.confluent.io/blog/kafka-connect-deep-dive-error-handling-dead-letter-queues/)
+  This is the end of Lab1, please continue with **[Lab 2](Lab-2.md)**
 

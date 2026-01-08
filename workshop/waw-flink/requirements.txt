@@ -1,0 +1,14 @@
+uvicorn 
+fastapi
+confluent_kafka
+jinja2
+attrs
+certifi
+httpx
+cachetools
+authlib
+referencing
+jsonschema
+orjson
+faker
+psycopg2-binary
