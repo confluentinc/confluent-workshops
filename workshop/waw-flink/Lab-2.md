@@ -29,10 +29,8 @@ In this lab, you will dive deeper into Flink features by learning how different 
 Open your terminal and clone the project repository:
 
 ```bash
-git clone https://github.com/confluentinc/cee-internal-projects.git
-cd cee-internal-projects
-git checkout enhanced-waw
-cd waw-flink
+git clone https://github.com/confluentinc/confluent-workshops.git
+cd confluent-workshops/workshop/waw-flink
 ```
 
 ### 2\. Activate Python Virtual Environment
