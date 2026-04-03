@@ -807,18 +807,18 @@ Make sure to delete all the resources created if you no longer wish to use the e
        <img src="images/delete_endpoint.png" width=50% height=50%>
     </div>
 
-2. Run the following command to delete the all other AWS resources:
+2. Run the following command to delete all the Confluent Cloud resources to save your credits:
 
     ```bash
-    cd workshop-XXXXXXX-XXXXXXX/terraform/osk
+    cd workshop-XXXXXXX-XXXXXXX/terraform/confluent
 
     terraform destroy --auto-approve
     ```
 
-3. Make sure to delete all the Confluent Cloud resources to save your credits.
+3. Make sure to delete all other AWS resources.
 
      ```bash
-    cd workshop-XXXXXXX-XXXXXXX/terraform/confluent
+    cd workshop-XXXXXXX-XXXXXXX/terraform/osk
 
     terraform destroy --auto-approve
     ```
