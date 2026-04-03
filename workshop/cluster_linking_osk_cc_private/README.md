@@ -211,9 +211,27 @@ In this section, you will use a Terraform script to provision an OSK instance on
 
 5. Save the output from the Terraform script in a text file for future reference, as you’ll need to use some of those values in the next section.
 
+    ```bash
+   Outputs:
+
+        aws_account_id = "xxxxxxxxxx"
+        aws_zones = [
+        "use1-az1",
+        "use1-az2",
+        "use1-az4",
+        ]
+        jumpbox_public_dns = "xxxxxxxxxxxxxxxx"
+        kafka_public_dns = "xxxxxxxxxxxx"
+        subnet_ids = [
+        "subnet-xxxxxxxxxxxx",
+        "subnet-xxxxxxxxxxxx",
+        "subnet-xxxxxxxxxxxx",
+        ]
+        vpc_cidr_block = "10.0.0.0/16"
+        vpc_id = "vpc-xxxxxxxxxxxx"
+   ```
 
 <br>
-
 
 
 ## <a name="step-2"></a>Step 2: Set up Confluent Cloud and Create a Enterprise Cluster
@@ -387,14 +405,9 @@ If you prefer using Infrastructure as Code (IaC), you can use the provided Terra
 In this section, you will explore the Enterprise Cluster using the Web console and retrieve the cluster settings to be used later in the workshop.
 
 1. Go to your Environment and click on the newly launched cluster.
-2. You see various option on the left. Click Cluster Overview option and subsequently click Cluster Settings.
-3. On the Cluster Settings page, expand **PRIVATE_LINK** Endpoint and copy the **Bootstrap** value in your notepad. Also copy the **Cluster ID**.
-
-    <div align="center" padding=25px>
-     <img src="images/cc_bootstrap_value.png" width=50% height=50%>
-    </div> 
-
-4. Feel free to explore Networking. 
+2. You see various option. Click the Networking tab to view the private link.
+3. Optionally, from the Overview tab, copy the Bootstrap server value and the Cluster ID, and save them in your notes.
+4. Feel free to explore the other tabs and setting. 
 
 <br>
 
@@ -403,9 +416,11 @@ In this section, you will explore the Enterprise Cluster using the Web console a
 
 In this section, you will SSH into a **jumpbox VM** to run all the CLI commands. You'll then create a new topic on the Kafka server and use the Kafka CLI tools to produce and consume messages.
 
-1. Navigate to the `terraform/osk` directory (if you haven’t already), then run the following command to retrieve the EC2 instance public DNS addresses. Skip this step if you already have these details.
+1. Navigate to the **`terraform/osk`** directory (if you haven’t already), then run the following command to retrieve the EC2 instance public DNS addresses. Skip this step if you already have these details.
    
    ```bash
+   cd confluent-workshops/workshop/cluster_linking_osk_cc_private/terraform/osk
+   
    terraform output
    ```
 
@@ -577,7 +592,7 @@ To set up Cluster Linking, follow these steps:
     - `consumer.offset.sync.enable`: Enables or disables the synchronization of consumer group offsets between clusters.
     - `consumer.offset.group.filters`: Specifies which consumer groups’ offsets will be mirrored using inclusion/exclusion filter logic. In this case, it mirrors offsets for all consumer groups in the source cluster.
 
-6. Create a destination-initiated (in this case, the destination is the Enterprise cluster) cluster link namely `osk-cc-link` by running the following command:
+6. Create a destination-initiated cluster link (where the Enterprise cluster is the destination) named `osk-cc-link` by running the following command. Be sure to replace the placeholders with the actual values.:
 
     ```
     confluent kafka link create osk-cc-link --source-cluster <APACHE_KAFKA_CLUSTER_ID> --source-bootstrap-server $KAFKA_PUBLIC_DNS:9092 --config ./cluster_link.config --cluster <ENTERPRISE_CLUSTER_ID>
@@ -636,8 +651,8 @@ To verify creation of the mirror topics, execute the following steps:
 5. Set the API key and secret as environment variables to avoid re-entering them repeatedly.
 
     ```bash
-    export API_KEY = "Enter the API key created above"
-    export API_SECRET = "Enter the API SECRET created above"
+    export API_KEY="Enter the API key created above"
+    export API_SECRET="Enter the API SECRET created above"
     ```
 
 6. Use the `Confluent` CLI to read from the mirror topic:
