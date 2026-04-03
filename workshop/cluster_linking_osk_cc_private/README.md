@@ -142,7 +142,7 @@ Before you begin, ensure you have the following installed:
 
 ## Setup your Laptop
 
-1. Launch a command terminal window and clone the repository (if not already done), and navigate to the migration directory:
+1. Launch a command terminal window and clone the repository (if not already done), and navigate to the `cluster_linking_osk_cc_private` directory:
 
     ```bash
     cd confluent-workshops/workshop/cluster_linking_osk_cc_private
@@ -403,7 +403,7 @@ In this section, you will explore the Enterprise Cluster using the Web console a
 
 In this section, you will SSH into a **jumpbox VM** to run all the CLI commands. You'll then create a new topic on the Kafka server and use the Kafka CLI tools to produce and consume messages.
 
-1. Change directory to `terraform/osk` directory (if not already done). Run the following command to find the EC2 instance public IP:
+1. Navigate to the `terraform/osk` directory (if you haven’t already), then run the following command to retrieve the EC2 instance public DNS addresses. Skip this step if you already have these details.
    
    ```bash
    terraform output
@@ -459,7 +459,7 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
     kafka-topics --create --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --topic test-topic --partitions 1 --replication-factor 1
     ```
 
-6. Produce some sample data using the `kafka-console-producer.sh` utility.
+6. Produce some sample data using the `kafka-console-producer` utility.
 
     > ⚠️ **Note:** In a real-world scenario, your applications or microservices would produce and consume messages by connecting to a Kafka cluster using configuration parameters such as bootstrap servers, API keys, and others. 
 
@@ -487,7 +487,7 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
 
     The message "This is a second message." is published. You then press **Ctrl+C** to exit the producer.
 
-7. Consume the messages using the `kafka-console-consumer.sh` utility. Also specify a consumer group - `my-consumer-group`.
+7. Consume the messages using the `kafka-console-consumer` utility. Also specify a consumer group - `my-consumer-group`.
 
     ```bash
     kafka-console-consumer --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --topic test-topic --group my-consumer-group --from-beginning
@@ -495,7 +495,7 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
 
     Make sure you see both the message you produced in the previous steps. You then press **Ctrl+C** to exit the consumer.
 
-8. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility. 
+8. View the consumer group offsets and lag by using the `kafka-consumer-groups` utility. 
 
     ```bash
     kafka-consumer-groups --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --describe --group my-consumer-group
@@ -583,7 +583,7 @@ To set up Cluster Linking, follow these steps:
     confluent kafka link create osk-cc-link --source-cluster <APACHE_KAFKA_CLUSTER_ID> --source-bootstrap-server $KAFKA_PUBLIC_DNS:9092 --config ./cluster_link.config --cluster <ENTERPRISE_CLUSTER_ID>
     ```
 
-    > ⚠️ **Note:** You can extract the <APACHE_KAFKA_CLUSTER_ID> by using the `kafka-cluster.sh cluster-id --bootstrap-server $KAFKA_PUBLIC_DNS:9092` command. Make sure to replace the placeholders with their actual values.
+    > ⚠️ **Note:** You can extract the <APACHE_KAFKA_CLUSTER_ID> by using the `kafka-cluster cluster-id --bootstrap-server $KAFKA_PUBLIC_DNS:9092` command. Make sure to replace the placeholders with their actual values.
 
     Once the link is created successfully, you can see the following output:
 
