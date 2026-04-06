@@ -5,7 +5,7 @@ terraform {
       version = "4.0.5"
     }
     local = {
-      source = "hashicorp/local"
+      source  = "hashicorp/local"
       version = "2.5.1"
     }
   }
@@ -19,7 +19,11 @@ provider "aws" {
 
 # Create the VPC
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block           = "10.0.0.0/16"
+  
+  # Enabled DNS hostnames and resolution
+  enable_dns_hostnames = true
+  enable_dns_support   = true
 
   tags = {
     Name = "osk-cc-migration-workshop"
@@ -35,16 +39,40 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
-# Create the Public Subnet
-resource "aws_subnet" "public" {
+# Create 3 Public Subnets
+resource "aws_subnet" "public_1" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.1.0/24"
-  availability_zone       = "us-east-1a" 
+  availability_zone_id    = "use1-az1" 
 
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "osk-cc-migration-workshop-public-subnet"
+    Name = "osk-cc-migration-workshop-public-subnet-1"
+  }
+}
+
+resource "aws_subnet" "public_2" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.2.0/24"
+  availability_zone_id    = "use1-az2" 
+
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "osk-cc-migration-workshop-public-subnet-2"
+  }
+}
+
+resource "aws_subnet" "public_3" {
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = "10.0.3.0/24"
+  availability_zone_id    = "use1-az4" 
+
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "osk-cc-migration-workshop-public-subnet-3"
   }
 }
 
@@ -63,9 +91,19 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# Associate the Route Table with the Public Subnet
-resource "aws_route_table_association" "a" {
-  subnet_id      = aws_subnet.public.id
+# Associate the Route Table with all 3 Public Subnets
+resource "aws_route_table_association" "a1" {
+  subnet_id      = aws_subnet.public_1.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_route_table_association" "a2" {
+  subnet_id      = aws_subnet.public_2.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
+resource "aws_route_table_association" "a3" {
+  subnet_id      = aws_subnet.public_3.id
   route_table_id = aws_route_table.public_rt.id
 }
 
@@ -85,13 +123,12 @@ resource "aws_key_pair" "generated_key" {
 
 # Save the generated private key to a local file
 resource "local_file" "private_key_pem" {
-  content  = tls_private_key.rsa_key.private_key_pem
-  filename = "${path.module}/my-tf-key.pem"
+  content         = tls_private_key.rsa_key.private_key_pem
+  filename        = "${path.module}/my-tf-key.pem"
   file_permission = "0400" # Set correct permissions
 }
 
 # ---------------------------------------------------------
-
 
 resource "aws_security_group" "kafka_sg" {
   name        = "kafka-sg"
@@ -136,43 +173,23 @@ resource "aws_security_group" "kafka_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  
 }
 
 # ---------------------------------------------------------
-
-
-output "ec2_instance_vpc_id" {
-  description = "The VPC ID of the newly created EC2 instance."
-  value       = aws_vpc.main.id
-}
-
-output "kafka_public_ip" {
-  description = "The public IP address of the EC2 instance."
-  value       = aws_instance.kafka_ec2.public_ip
-}
-
-output "jumpbox_public_ip" {
-  description = "The public IP address of the EC2 instance."
-  value       = aws_instance.jumpbox_ec2.public_ip
-}
-
-
-# ---------------------------------------------------------
-
 
 resource "aws_instance" "kafka_ec2" {
   ami                    = "ami-05ffe3c48a9991133" # Amazon Linux 2 AMI
   instance_type          = "t2.medium"
-  subnet_id              = aws_subnet.public.id
+  # Deployed in the first subnet
+  subnet_id              = aws_subnet.public_1.id 
   key_name               = aws_key_pair.generated_key.key_name
   vpc_security_group_ids = [aws_security_group.kafka_sg.id]
 
   # This block customizes the root (/) volume
   root_block_device {
-    volume_size = 50      # Size in GiB
-    volume_type = "gp3"   # General Purpose SSD (recommended)
-    delete_on_termination = true # The volume will be deleted when the instance is terminated
+    volume_size           = 50      # Size in GiB
+    volume_type           = "gp3"   # General Purpose SSD (recommended)
+    delete_on_termination = true    # The volume will be deleted when the instance is terminated
   }
 
   user_data = <<-EOF
@@ -188,9 +205,9 @@ resource "aws_instance" "kafka_ec2" {
 
               # Download and extract Kafka
               cd /opt
-              curl -O https://downloads.apache.org/kafka/3.9.0/kafka_2.13-3.9.0.tgz
-              tar -xzf kafka_2.13-3.9.0.tgz
-              mv kafka_2.13-3.9.0 kafka
+              curl -O https://archive.apache.org/dist/kafka/3.9.1/kafka_2.13-3.9.1.tgz
+              tar -xzf kafka_2.13-3.9.1.tgz
+              mv kafka_2.13-3.9.1 kafka
 
               # Extract the public IP of EC2 instance
               export EC2_PUBLIC_IP=$(curl -s ifconfig.me)
@@ -222,26 +239,25 @@ resource "aws_instance" "kafka_ec2" {
               echo 'export PATH="$PATH:/opt/kafka/bin/:/opt/confluent-8.0.0/bin/"' >> /home/ec2-user/.bash_profile
               source /home/ec2-user/.bash_profile 
 
-
               EOF
-    tags = {
+  tags = {
     Name = "osk-cc-workshop-kafka-ec2"
-    }
+  }
 }
-
 
 resource "aws_instance" "jumpbox_ec2" {
   ami                    = "ami-05ffe3c48a9991133" # Amazon Linux 2 AMI
   instance_type          = "t2.medium"
-  subnet_id              = aws_subnet.public.id
+  # Deployed in the first subnet
+  subnet_id              = aws_subnet.public_1.id 
   key_name               = aws_key_pair.generated_key.key_name
   vpc_security_group_ids = [aws_security_group.kafka_sg.id]
 
   # This block customizes the root (/) volume
   root_block_device {
-    volume_size = 50      # Size in GiB
-    volume_type = "gp3"   # General Purpose SSD (recommended)
-    delete_on_termination = true # The volume will be deleted when the instance is terminated
+    volume_size           = 50      # Size in GiB
+    volume_type           = "gp3"   # General Purpose SSD (recommended)
+    delete_on_termination = true    # The volume will be deleted when the instance is terminated
   }
 
   user_data = <<-EOF
@@ -257,9 +273,9 @@ resource "aws_instance" "jumpbox_ec2" {
 
               # Download and extract Kafka
               cd /opt
-              curl -O https://downloads.apache.org/kafka/3.9.0/kafka_2.13-3.9.0.tgz
-              tar -xzf kafka_2.13-3.9.0.tgz
-              mv kafka_2.13-3.9.0 kafka
+              curl -O https://archive.apache.org/dist/kafka/3.9.1/kafka_2.13-3.9.1.tgz
+              tar -xzf kafka_2.13-3.9.1.tgz
+              mv kafka_2.13-3.9.1 kafka
 
               # Install Confluent CLI
               curl -sL --http1.1 https://cnfl.io/cli | sh -s --
@@ -273,10 +289,9 @@ resource "aws_instance" "jumpbox_ec2" {
               # Set the PATH in .bash_profile file
               echo 'export PATH="$PATH:/opt/kafka/bin/:/opt/confluent-8.0.0/bin/"' >> /home/ec2-user/.bash_profile
               source /home/ec2-user/.bash_profile 
-
-
               EOF
-    tags = {
+
+  tags = {
     Name = "osk-cc-workshop-jumpbox"
-    }
+  }
 }

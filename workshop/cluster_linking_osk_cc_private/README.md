@@ -28,104 +28,123 @@ By the end, participants will understand the complete migration process and key 
 
 <br>
 
-
-## Prerequisites
+## Requirements
 
 Before you begin, ensure you have the following installed:
 
-- **Confluent Cloud Account**
-    - Sign-up for a Confluent Cloud account [here](https://www.confluent.io/confluent-cloud/tryfree/)
-    - Once you have signed up and logged in, click on the menu icon at the upper right hand corner, click on "Billing & payment", then enter payment details under “Payment details & contacts”. A screenshot of the billing UI is included below.
+- **Access**
+    - *Confluent Cloud Account Access* - https://cnfl.io/getstarted
+    - *AWS Account Access* 
 
-    > **Note:** You will create resources during this workshop that will incur costs. When you sign up for a Confluent Cloud account, you will get free credits to use in Confluent Cloud. This will cover the cost of resources created during the workshop. More details on the specifics can be found [here](https://www.confluent.io/confluent-cloud/tryfree/).
+- **Local Software Requirements:** 
 
-- [Terraform](https://www.terraform.io/downloads.html) - v1.5.7 or later. 
-- [AWS CLI (Optional)](https://aws.amazon.com/cli/) configured with appropriate credentials.
-- [Kafka CLI (Optional)](https://kafka.apache.org/downloads) 
-- [Confluent CLI (Optional)](https://docs.confluent.io/confluent-cli/current/install.html) - If on MAC run `brew install confluentinc/tap/cli`. 
+    - [Terraform (REQUIRED)](https://www.terraform.io/downloads.html) - v1.5.7 or later. 
+    - [AWS CLI (OPTIONAL)](https://aws.amazon.com/cli/) configured with appropriate credentials.
+    - [Kafka CLI (OPTIONAL)](https://kafka.apache.org/downloads) 
+    - [Confluent CLI (OPTIONAL)](https://docs.confluent.io/confluent-cli/current/install.html) - If on MAC run `brew install confluentinc/tap/cli`. 
 
-<details>
-<summary>Installing prerequisites on MAC</summary>
+- **Clone the workshop Github Repo on your Laptop**
 
-Install the prerequisites by running:
+    ```bash
+   
+    git clone https://github.com/confluentinc/confluent-workshops.git
 
-```bash
-brew install git terraform confluentinc/tap/cli awscli
-```
-
-Install **Kafka command-line interface (CLI)** on your laptop without running a local Kafka server.
-
-1. Download the Kafka binaries:
-
+    cd confluent-workshops/workshop/cluster_linking_osk_cc_private
+    
     ```
-    cd /$HOME
-    curl -O https://downloads.apache.org/kafka/3.9.0/kafka_2.13-3.9.0.tgz
-    tar -xzf kafka_2.13-3.9.0.tgz
-    mv kafka_2.13-3.9.0 kafka
-    ```
+   
+- **Install dependencies**
 
-2. Configure Your System's PATH:
+    Install the required tools manually:
 
-    2.1. Open your shell profile file. This is typically `~/.zshrc` for Zsh (the default on modern macOS) or `~/.bash_profile` or `~/.bashrc` for Bash.
+    <details>
+    <summary>Installing prerequisites on MAC</summary>
 
-    2.2. Add the following line to the end of the file.
+    Install the prerequisites by running:
 
-    ```
-    export PATH="$PATH:$HOME/kafka/bin"
+    ```bash
+    brew install git terraform confluentinc/tap/cli awscli
     ```
 
-    2.3. Apply the changes by restarting your terminal or running `source ~/.zshrc` (or the appropriate file for your shell).
+    Install **Kafka command-line interface (CLI)** on your laptop without running a local Kafka server.
+
+    1. Download the Kafka binaries:
+
+        ```
+        cd /$HOME
+        curl -O https://downloads.apache.org/kafka/3.9.0/kafka_2.13-3.9.0.tgz
+        tar -xzf kafka_2.13-3.9.0.tgz
+        mv kafka_2.13-3.9.0 kafka
+        ```
+
+    2. Configure Your System's PATH:
+
+        2.1. Open your shell profile file. This is typically `~/.zshrc` for Zsh (the default on modern macOS) or `~/.bash_profile` or `~/.bashrc` for Bash.
+
+        2.2. Add the following line to the end of the file.
+
+        ```
+        export PATH="$PATH:$HOME/kafka/bin"
+        ```
+
+        2.3. Apply the changes by restarting your terminal or running `source ~/.zshrc` (or the appropriate file for your shell).
 
 
-</details>
+    </details>
 
-<details>
-<summary>Installing prerequisites on Windows</summary>
+    <details>
+    <summary>Installing prerequisites on Windows</summary>
 
-Install the prerequisites by running:
+    Install the prerequisites by running:
 
-```powershell
-winget install --id Git.Git -e
-winget install --id Hashicorp.Terraform -e
-winget install --id ConfluentInc.Confluent-CLI -e
-winget install --id Amazon.AWSCLI -e
-winget install --id Microsoft.OpenJDK.17 -e
-```
+    ```powershell
+    winget install --id Git.Git -e
+    winget install --id Hashicorp.Terraform -e
+    winget install --id ConfluentInc.Confluent-CLI -e
+    winget install --id Amazon.AWSCLI -e
+    winget install --id Microsoft.OpenJDK.17 -e
+    ```
 
-Install **Kafka command-line interface (CLI)** on your laptop without running a local Kafka server.
-`
-1. Go to the [Apache Kafka downloads](https://kafka.apache.org/downloads) page and find the archive for `2.13-3.9.0`. Download the binary `.tgz` file.
-2. Windows doesn't natively handle `.tgz` files well. Use a tool like **7-Zip** to extract the contents. Extract the files to a simple path, like `C:\kafka`.
-3. The Kafka CLI scripts for Windows are located in the `bin\windows` directory.
+    Install **Kafka command-line interface (CLI)** on your laptop without running a local Kafka server.
+    `
+    1. Go to the [Apache Kafka downloads](https://kafka.apache.org/downloads) page and find the archive for `2.13-3.9.0`. Download the binary `.tgz` file.
+    2. Windows doesn't natively handle `.tgz` files well. Use a tool like **7-Zip** to extract the contents. Extract the files to a simple path, like `C:\kafka`.
+    3. The Kafka CLI scripts for Windows are located in the `bin\windows` directory.
 
-    3.1. Open the "Environment Variables" settings:
+        3.1. Open the "Environment Variables" settings:
 
-       - Press `Win + S` and search for "Edit the system environment variables."
+        - Press `Win + S` and search for "Edit the system environment variables."
 
-       - Click the "Environment Variables..." button.
+        - Click the "Environment Variables..." button.
 
-    3.2. Edit the Path variable: In the "System variables" section, find and select the `Path` variable, then click "Edit."
+        3.2. Edit the Path variable: In the "System variables" section, find and select the `Path` variable, then click "Edit."
 
-    3.3. Add the Kafka `bin\windows` path:
+        3.3. Add the Kafka `bin\windows` path:
 
-       - Click "New" and paste the full path to the `bin\windows` directory inside your extracted Kafka folder (e.g., `C:\kafka\bin\windows`).
+        - Click "New" and paste the full path to the `bin\windows` directory inside your extracted Kafka folder (e.g., `C:\kafka\bin\windows`).
 
-       - Save your changes by clicking "OK" on all the windows.
+        - Save your changes by clicking "OK" on all the windows.
 
-       - Restart your Command Prompt or PowerShell for the changes to take effect.
+        - Restart your Command Prompt or PowerShell for the changes to take effect.
 
-</details> 
-
-
+    </details> 
 <br>
 
+- **Sign up for Confluent Cloud**
+    1. Navigate to [Confluent Cloud Sign Up](https://cnfl.io/getstarted).
+    2. Sign up with any of the desired identity providers or your email ID.
+    3. Finish creating your account by filling in a couple of details.
+    4. Click on skip for adding your teammates for now. Feel free to add your teammates at a later point in time.
+    5. Answer a couple of questions, and you are set to create your first cluster!
+    6. Click on "Next" to create a cluster and enter promo code details.
+    7. Entering your credit card details and receive $400 in free credits.
+    
 
 ## Setup your Laptop
 
-1. Launch a command terminal window and clone the repository:
+1. Launch a command terminal window and clone the repository (if not already done), and navigate to the `cluster_linking_osk_cc_private` directory:
 
     ```bash
-    git clone https://github.com/confluentinc/confluent-workshops.git
     cd confluent-workshops/workshop/cluster_linking_osk_cc_private
     ```
 
@@ -135,6 +154,8 @@ Install **Kafka command-line interface (CLI)** on your laptop without running a 
    cd terraform
    ```
    
+   You will find two directories: `osk` and `confluent`. The `osk` directory contains scripts to set up the OSK cluster on AWS, while the `confluent` directory includes scripts to configure the enterprise cluster with a private link.
+
 3. Steps to launch **AWS Workspace Studio** and get AWS credentials - Refer to the document [here](https://docs.google.com/document/d/1eD0aB5W6TsAC2J77_KvBNIsTBZ7Ak7ZhOKWb_r2zzBA/edit?tab=t.0)
 
    > ⚠️ **Note:**  If you already have the AWS CLI configured on your machine and pointing to the correct AWS account, you can skip this step.
@@ -144,7 +165,6 @@ Install **Kafka command-line interface (CLI)** on your laptop without running a 
    Commands for MAC:
        
    ```bash
-   export AWS_DEFAULT_REGION="<cloud_region>"
    export AWS_ACCESS_KEY_ID="<AWS_API_KEY>"
    export AWS_SECRET_ACCESS_KEY="<AWS_SECRET>"
    export AWS_SESSION_TOKEN="<AWS_SESSION_TOKEN>"
@@ -152,7 +172,6 @@ Install **Kafka command-line interface (CLI)** on your laptop without running a 
    Commands for Windows:
 
    ```bash
-   set AWS_DEFAULT_REGION="<cloud_region>"
    set AWS_ACCESS_KEY_ID="<AWS_API_KEY>"
    set AWS_SECRET_ACCESS_KEY="<AWS_SECRET>"
    set AWS_SESSION_TOKEN="<AWS_SESSION_TOKEN>"
@@ -172,9 +191,9 @@ In this section, you will use a Terraform script to provision an OSK instance on
     AWS_SESSION_TOKEN="<AWS_SESSION_TOKEN>"
     ```
 
-2. Change directory to `terraform` directory (if not already done):
+2. Change directory to `terraform/osk` directory (if not already done):
     ```
-    cd terraform
+    cd terraform/osk
     ```
 3. Initialize Terraform
 
@@ -187,16 +206,97 @@ In this section, you will use a Terraform script to provision an OSK instance on
    ```bash
    terraform apply --auto-approve
    ```
+   
+   Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 instance.
 
-Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 instance.
+5. Save the output from the Terraform script in a text file for future reference, as you’ll need to use some of those values in the next section.
 
+    ```bash
+   Outputs:
 
+        aws_account_id = "xxxxxxxxxx"
+        aws_zones = [
+        "use1-az1",
+        "use1-az2",
+        "use1-az4",
+        ]
+        jumpbox_public_dns = "xxxxxxxxxxxxxxxx"
+        kafka_public_dns = "xxxxxxxxxxxx"
+        subnet_ids = [
+        "subnet-xxxxxxxxxxxx",
+        "subnet-xxxxxxxxxxxx",
+        "subnet-xxxxxxxxxxxx",
+        ]
+        vpc_cidr_block = "10.0.0.0/16"
+        vpc_id = "vpc-xxxxxxxxxxxx"
+   ```
 
 <br>
 
 
-
 ## <a name="step-2"></a>Step 2: Set up Confluent Cloud and Create a Enterprise Cluster
+
+You have two options for provisioning your Confluent Cloud Enterprise cluster with AWS PrivateLink: you can either run the provided Terraform script for an automated deployment, or follow the step-by-step manual instructions via the web console.
+
+---
+
+### Option A: Automated Setup via Terraform (Recommended)
+
+If you prefer using Infrastructure as Code (IaC), you can use the provided Terraform script to automatically provision the environment, Enterprise cluster, and AWS PrivateLink. 
+
+1. ### Create a Confluent Cloud API Key
+    Create Confluent Cloud API Key for your confluent cloud account with resource scope as Cloud resource management.
+    - Go to https://confluent.cloud/settings/api-keys
+    - Click on "+ Add API Key" button (make sure you have Organization Admin RBAC role) and select "My account" option. Click Next.
+    - Select "Cloud resource management" option and click Next 
+    
+    <div align="center" padding=25px>
+        <img src="images/create-api-key.png" width=50% height=50%>
+    </div>
+
+    - Add a name and description to help identify this API key in the future, and click Create API Key.
+    - Download API Key and click Complete.
+
+2. ### Use Terraform to create the Enterprise Cluster
+
+    - Navigate to the directory containing the Terraform files:
+    
+    ```bash
+   
+        cd confluent-workshops/workshop/cluster_linking_osk_cc_private/terraform/confluent
+
+    ```
+    - Edit the `terraform.tfvars` file to enter the following values. (Note: By default, you will use the `us-east-1` region):
+
+    ```bash
+        confluent_api_key    = "XXXXXXXX"
+        confluent_api_secret = "XXXXXXXX"
+
+        aws_account_id       = "XXXXXXXXX"
+        vpc_id               = "XXXXXXXXXXX"
+        subnet_ids           = ["subnet-XXXXXXXXXX", "subnet-XXXXXXXXXX", "subnet-XXXXXXXXXX"]
+    ```
+    
+    💡 Tip: You will find these values from the output of the previous Terraform script you ran to set up the OSK (Open Source Kafka).
+    
+    - Initialize the Terraform workspace:
+
+    ```bash
+        terraform init
+    ```
+    - Review the resources that will be created:
+
+    ```bash
+        terraform plan
+    ```
+    - Apply the script to provision the infrastructure:
+
+    ```bash 
+        terraform apply --auto-approve
+    ```
+    - Make a note of the Terraform script output, particularly the enterprise cluster’s bootstrap server address.
+
+### Option B: Manual Setup via Web Console (Optional)
 
 1. Log in to [Confluent Cloud](https://confluent.cloud) and enter your email and password.
 
@@ -305,82 +405,59 @@ Terraform will take around 10 mins to deploy and initialize OSK on AWS EC2 insta
 In this section, you will explore the Enterprise Cluster using the Web console and retrieve the cluster settings to be used later in the workshop.
 
 1. Go to your Environment and click on the newly launched cluster.
-2. You see various option on the left. Click Cluster Overview option and subsequently click Cluster Settings.
-3. On the Cluster Settings page, expand **PRIVATE_LINK** Endpoint and copy the **Bootstrap** value in your notepad. Also copy the **Cluster ID**.
-
-    <div align="center" padding=25px>
-     <img src="images/cc_bootstrap_value.png" width=50% height=50%>
-    </div> 
-
-4. Feel free to explore Networking. 
-
-<br>
-
-## <a name="step-4"></a>Step 4: Create an API Key Pair for Accessing the Confluent Cloud Enterprise Cluster
-
-1. Switch to the Confluent Cloud Web console and navigate to the **Cluster Overview** section of your Enterprise Cluster.
-2. Click **API keys** on the left sidebar menu. 
-3. If this is your first API key within your cluster, click **Create key**. If you have set up API keys in your cluster in the past and already have an existing API key, click **+ Add key**.
-   
-    <div align="center" padding=25px>
-       <img src="images/create_api_keys.png" width=50% height=50%>
-    </div>
-
-4. Select **My Account**, then click Next. Give it a description and click **Download and continue**
-5. Save your API_KEY and API_SECRET - you will need these during the workshop.
+2. You see various option. Click the Networking tab to view the private link.
+3. Optionally, from the Overview tab, copy the Bootstrap server value and the Cluster ID, and save them in your notes.
+4. Feel free to explore the other tabs and setting. 
 
 <br>
 
 
-## <a name="step-5"></a>Step 5: Connect to Open-Source Kafka (OSK) and Produce Messages
+## <a name="step-4"></a>Step 4: Connect to Open-Source Kafka (OSK) and Produce Messages
 
 In this section, you will SSH into a **jumpbox VM** to run all the CLI commands. You'll then create a new topic on the Kafka server and use the Kafka CLI tools to produce and consume messages.
 
-1. Change directory to `terraform` directory (if not already done). Run the following command to find the EC2 instance public IP:
+1. Navigate to the **`terraform/osk`** directory (if you haven’t already), then run the following command to retrieve the EC2 instance public DNS addresses. Skip this step if you already have these details.
    
    ```bash
+   cd confluent-workshops/workshop/cluster_linking_osk_cc_private/terraform/osk
+   
    terraform output
    ```
 
    Copy the output values in a notepad. It should look like this:
 
    ```
-    ec2_instance_vpc_id = "vpc-xxxxxxxxxxxxxxxxxx"
-    jumpbox_public_ip = "XX.XX.XX.XX"
-    kafka_public_ip = "XX.XX.XX.XX"
+    jumpbox_public_dns = "xxxxxxxxxxx"
+    kafka_public_dns = "xxxxxxxxxx"
    ```
 
 2. Use the following command to connect to the jumpbox instance via SSH:
 
     ```
-    ssh -i my-tf-key.pem ec2-user@<jumpbox_public_ip>
+    ssh -i my-tf-key.pem ec2-user@<jumpbox_public_dns>
     ```
 
-    **Replace `<jumpbox_public_ip>` with the actual Jumpbox public IP.** Enter `yes` when prompted about fingerprinting.
+    **Replace `<jumpbox_public_dns>` with the actual Jumpbox public dns.** Enter `yes` when prompted about fingerprinting.
 
 3. Execute the commands below in your **Jumpbox terminal window** to set up the environment variables. Be sure to replace the placeholders with the actual values.
 
    Commands for MAC:
        
    ```bash
-   export API_KEY="<api_key created to access the Enterprise Cluster>" 
-   export API_SECRET="<api_secret created to access the Enterprise Cluster>"
    export ENTERPRISE_CLUSTER_BOOTSTRAP="<bootstrap value of the Enterprise Cluster including port number>"
-   export KAFKA_PUBLIC_IP="<Public IP of your OSK Cluster, from terraform output command>" 
+   export KAFKA_PUBLIC_DNS="<Public DNS of your OSK Cluster, from terraform output command>" 
    ```
    Commands for Windows:
 
    ```bash
-   set API_KEY="<api_key created to access the Enterprise Cluster>" 
-   set API_SECRET="<api_secret created to access the Enterprise Cluster>"
    set ENTERPRISE_CLUSTER_BOOTSTRAP="<bootstrap value of the Enterprise Cluster including port number>"
-   set KAFKA_PUBLIC_IP="<Public IP of your OSK Cluster, from terraform output command>" 
+   set KAFKA_PUBLIC_DNS="<Public DNS of your OSK Cluster, from terraform output command>" 
    ```
 
 4. Execute the following command to find the cluster ID for an open-source Apache Kafka installation. 
 
     ```bash
-    kafka-cluster.sh cluster-id --bootstrap-server $KAFKA_PUBLIC_IP:9092
+    kafka-cluster cluster-id --bootstrap-server $KAFKA_PUBLIC_DNS:9092
     ```
 
     You’ll see an output like `Cluster ID: xxxxxxxxxxxxxxx`. Make sure to copy it, as you’ll need it later when setting up cluster linking.
@@ -394,15 +471,15 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
 5. Create a topic in Apache Kafka using the following command. You will use the `kafka-topics.sh` utility to create the topic:
     
     ```bash
-    kafka-topics.sh --create --bootstrap-server $KAFKA_PUBLIC_IP:9092 --topic test-topic --partitions 1 --replication-factor 1
+    kafka-topics --create --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --topic test-topic --partitions 1 --replication-factor 1
     ```
 
-6. Produce some sample data using the `kafka-console-producer.sh` utility.
+6. Produce some sample data using the `kafka-console-producer` utility.
 
     > ⚠️ **Note:** In a real-world scenario, your applications or microservices would produce and consume messages by connecting to a Kafka cluster using configuration parameters such as bootstrap servers, API keys, and others. 
 
     ```bash
-    kafka-console-producer.sh --bootstrap-server $KAFKA_PUBLIC_IP:9092 --topic test-topic
+    kafka-console-producer --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --topic test-topic
     ```
 
     Your terminal shows the prompt:
@@ -425,18 +502,18 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
 
     The message "This is a second message." is published. You then press **Ctrl+C** to exit the producer.
 
-7. Consume the messages using the `kafka-console-consumer.sh` utility. Also specify a consumer group - `my-consumer-group`.
+7. Consume the messages using the `kafka-console-consumer` utility. Also specify a consumer group - `my-consumer-group`.
 
     ```bash
-    kafka-console-consumer.sh --bootstrap-server $KAFKA_PUBLIC_IP:9092 --topic test-topic --group my-consumer-group --from-beginning
+    kafka-console-consumer --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --topic test-topic --group my-consumer-group --from-beginning
     ```
 
     Make sure you see both the message you produced in the previous steps. You then press **Ctrl+C** to exit the consumer.
 
-8. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility. 
+8. View the consumer group offsets and lag by using the `kafka-consumer-groups` utility. 
 
     ```bash
-    kafka-consumer-groups.sh --bootstrap-server $KAFKA_PUBLIC_IP:9092 --describe --group my-consumer-group
+    kafka-consumer-groups --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --describe --group my-consumer-group
     ```
 
     The command will produce a table with the following important columns:
@@ -458,7 +535,7 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
 <br>
 
 
-## <a name="step-6"></a>Step 6: Set up Cluster Linking on Confluent Cloud
+## <a name="step-5"></a>Step 5: Set up Cluster Linking on Confluent Cloud
 
 With the prerequisites complete, you can now configure the Cluster Link. This process involves creating a link on your destination cluster (Confluent Cloud Enterprise Cluster) that points to your source (Apache Kafka) cluster. You’ll use the `Confluent CLI` from your **Jumpbox** terminal to perform this setup.
 
@@ -515,13 +592,13 @@ To set up Cluster Linking, follow these steps:
     - `consumer.offset.sync.enable`: Enables or disables the synchronization of consumer group offsets between clusters.
     - `consumer.offset.group.filters`: Specifies which consumer groups’ offsets will be mirrored using inclusion/exclusion filter logic. In this case, it mirrors offsets for all consumer groups in the source cluster.
 
-6. Create a destination-initiated (in this case, the destination is the Enterprise cluster) cluster link namely `osk-cc-link` by running the following command:
+6. Create a destination-initiated cluster link (where the Enterprise cluster is the destination) named `osk-cc-link` by running the following command. Be sure to replace the placeholders with the actual values.:
 
     ```
-    confluent kafka link create osk-cc-link --source-cluster <APACHE_KAFKA_CLUSTER_ID> --source-bootstrap-server $KAFKA_PUBLIC_IP:9092 --config ./cluster_link.config --cluster <ENTERPRISE_CLUSTER_ID>
+    confluent kafka link create osk-cc-link --source-cluster <APACHE_KAFKA_CLUSTER_ID> --source-bootstrap-server $KAFKA_PUBLIC_DNS:9092 --config ./cluster_link.config --cluster <ENTERPRISE_CLUSTER_ID>
     ```
 
-    > ⚠️ **Note:** You can extract the <APACHE_KAFKA_CLUSTER_ID> by using the `kafka-cluster.sh cluster-id --bootstrap-server $KAFKA_PUBLIC_IP:9092` command. Make sure to replace the placeholders with their actual values.
+    > ⚠️ **Note:** You can extract the <APACHE_KAFKA_CLUSTER_ID> by using the `kafka-cluster cluster-id --bootstrap-server $KAFKA_PUBLIC_DNS:9092` command. Make sure to replace the placeholders with their actual values.
 
     Once the link is created successfully, you can see the following output:
 
@@ -545,7 +622,7 @@ To set up Cluster Linking, follow these steps:
 <br>
 
 
-## <a name="step-7"></a>Step 7: Verifying the Creation of the Mirror Topic in the Enterprise Cluster
+## <a name="step-6"></a>Step 6: Verifying the Creation of the Mirror Topic in the Enterprise Cluster
 
 To verify creation of the mirror topics, execute the following steps:
 
@@ -565,7 +642,20 @@ To verify creation of the mirror topics, execute the following steps:
 
     Look for the **Mirror Status** to ensure it is in an `Active` state and pulling records from the source.
 
-4. Use the `Confluent` CLI to read from the mirror topic:
+4. Generate the API key and secret required to access the Confluent Cloud Enterprise cluster.
+
+     ```
+    confluent api-key create --resource <ENTERPRISE_CLUSTER_ID>
+    ```
+
+5. Set the API key and secret as environment variables to avoid re-entering them repeatedly.
+
+    ```bash
+    export API_KEY="Enter the API key created above"
+    export API_SECRET="Enter the API SECRET created above"
+    ```
+
+6. Use the `Confluent` CLI to read from the mirror topic:
 
     ```
     confluent kafka topic consume test-topic --api-key $API_KEY --api-secret $API_SECRET --bootstrap $ENTERPRISE_CLUSTER_BOOTSTRAP --from-beginning
@@ -574,7 +664,7 @@ To verify creation of the mirror topics, execute the following steps:
     You will see all the data getting replicated from Apache Kafka to Confluent Cloud. Press CTRL+C to exit.
 
 
-5. Try to write some data to the mirror topic and see what happens:
+7. Try to write some data to the mirror topic and see what happens:
 
     ```
     confluent kafka topic produce test-topic --api-key $API_KEY --api-secret $API_SECRET --bootstrap $ENTERPRISE_CLUSTER_BOOTSTRAP
@@ -589,7 +679,7 @@ To verify creation of the mirror topics, execute the following steps:
 
 
 
-## <a name="step-8"></a>Step 8: Make the Mirror Topic Writable
+## <a name="step-7"></a>Step 7: Make the Mirror Topic Writable
 
 The mirror topics are read-only by default. To make a mirror topic writable (i.e., change it from read-only, mirrored state to a regular, independent, writable topic) in Confluent Kafka (whether in Confluent Platform or Confluent Cloud with Cluster Linking), you need to use either the promote or failover command. This operation is commonly called “promoting” the mirror topic, and is an essential step in cutover, DR, or migration workflows.
 
@@ -641,14 +731,14 @@ Execute the following steps to make the mirror topic writable:
 <br>
 
 
-## <a name="step-9"></a>Step 9: Produce and Consume Data from Confluent Cloud
+## <a name="step-8"></a>Step 8: Produce and Consume Data from Confluent Cloud
 
 In this section, you will simulate a typical producer and consumer migration using the `kafka-console-*` utility. In a real-world scenario, your microservices would handle the business logic, and you would only need to update the configurations of your microservices to connect to your Confluent Cloud cluster instead of the Apache Kafka cluster for producing and consuming messages new records.
 
 1. Produce some sample data using the `kafka-console-producer.sh` utility:  
 
     ```bash
-    kafka-console-producer.sh \
+    kafka-console-producer \
     --bootstrap-server $ENTERPRISE_CLUSTER_BOOTSTRAP \
     --topic test-topic \
     --producer-property security.protocol=SASL_SSL \
@@ -661,7 +751,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 2. Consume the messages using the `kafka-console-consumer.sh` utility:
 
     ```bash
-    kafka-console-consumer.sh \
+    kafka-console-consumer \
     --bootstrap-server $ENTERPRISE_CLUSTER_BOOTSTRAP \
     --topic test-topic \
     --from-beginning \
@@ -675,7 +765,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 3. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility: 
 
     ```bash
-    kafka-consumer-groups.sh \
+    kafka-consumer-groups \
     --bootstrap-server $ENTERPRISE_CLUSTER_BOOTSTRAP \
     --describe \
     --group my-consumer-group \
@@ -692,7 +782,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 4. Consume only the new messages by specifying the consumer group.
 
     ```bash
-    kafka-console-consumer.sh \
+    kafka-console-consumer \
     --bootstrap-server $ENTERPRISE_CLUSTER_BOOTSTRAP \
     --topic test-topic \
     --group my-consumer-group \
@@ -707,7 +797,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 <br>
 
 
-## <a name="step-10"></a>Step 10: Clean up the Resources
+## <a name="step-9"></a>Step 9: Clean up the Resources
 
 Make sure to delete all the resources created if you no longer wish to use the environment.
 
@@ -717,19 +807,25 @@ Make sure to delete all the resources created if you no longer wish to use the e
        <img src="images/delete_endpoint.png" width=50% height=50%>
     </div>
 
-2. Run the following command to delete the all other AWS resources:
+2. Run the following command to delete all the Confluent Cloud resources to save your credits:
 
     ```bash
-    cd workshop-XXXXXXX-XXXXXXX/terraform
+    cd workshop-XXXXXXX-XXXXXXX/terraform/confluent
 
     terraform destroy --auto-approve
     ```
 
-3. Make sure to delete all the Confluent Cloud resources (Topics, Kafka cluster, Cluster Links) to save your credits.
+3. Make sure to delete all other AWS resources.
+
+     ```bash
+    cd workshop-XXXXXXX-XXXXXXX/terraform/osk
+
+    terraform destroy --auto-approve
+    ```
 
 <br>
 
-## <a name="step-8"></a>Confluent Resources and Further Testing
+## <a name="step-10"></a>Confluent Resources and Further Testing
 
 * [Confluent Cloud Documentation](https://docs.confluent.io/cloud/current/overview.html)
 
