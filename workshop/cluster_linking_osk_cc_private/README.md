@@ -462,13 +462,13 @@ In this section, you will SSH into a **jumpbox VM** to run all the CLI commands.
 
     You’ll see an output like `Cluster ID: xxxxxxxxxxxxxxx`. Make sure to copy it, as you’ll need it later when setting up cluster linking.
 
-    > ⚠️ **Note:** If you see the error **kafka-cluster.sh: command not found** in your terminal, run the following command to update the system PATH environment variable.
+    > ⚠️ **Note:** If you see the error **kafka-cluster: command not found** in your terminal, run the following command to update the system PATH environment variable.
     
    ```bash
     source ~/.bash_profile
    ```
 
-5. Create a topic in Apache Kafka using the following command. You will use the `kafka-topics.sh` utility to create the topic:
+5. Create a topic in Apache Kafka using the following command. You will use the `kafka-topics` utility to create the topic:
     
     ```bash
     kafka-topics --create --bootstrap-server $KAFKA_PUBLIC_DNS:9092 --topic test-topic --partitions 1 --replication-factor 1
@@ -735,7 +735,7 @@ Execute the following steps to make the mirror topic writable:
 
 In this section, you will simulate a typical producer and consumer migration using the `kafka-console-*` utility. In a real-world scenario, your microservices would handle the business logic, and you would only need to update the configurations of your microservices to connect to your Confluent Cloud cluster instead of the Apache Kafka cluster for producing and consuming messages new records.
 
-1. Produce some sample data using the `kafka-console-producer.sh` utility:  
+1. Produce some sample data using the `kafka-console-producer` utility:  
 
     ```bash
     kafka-console-producer \
@@ -748,7 +748,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
     Press **Ctrl+C** to exit the producer.
 
-2. Consume the messages using the `kafka-console-consumer.sh` utility:
+2. Consume the messages using the `kafka-console-consumer` utility:
 
     ```bash
     kafka-console-consumer \
@@ -762,7 +762,7 @@ In this section, you will simulate a typical producer and consumer migration usi
 
     Make sure you see four messages. The one created on Confluent Kafka as well as OSK.
 
-3. View the consumer group offsets and lag by using the `kafka-consumer-groups.sh` utility: 
+3. View the consumer group offsets and lag by using the `kafka-consumer-groups` utility: 
 
     ```bash
     kafka-consumer-groups \
