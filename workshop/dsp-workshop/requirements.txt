@@ -5,7 +5,7 @@ sqlalchemy==2.0.51
 psycopg2-binary==2.9.12
 confluent-kafka==2.12.1
 python-multipart==0.0.32
-boto3==1.43.38
+boto3==1.43.40
 pandas==2.3.3
 plotly==5.24.1
 python-dotenv==1.2.2 
