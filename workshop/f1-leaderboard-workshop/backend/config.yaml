@@ -1,0 +1,13 @@
+kafka:
+  bootstrap.servers: 'BOOTSTRAP_SERVER_URL_FROM_API_KEY_FILE'
+  security.protocol: "SASL_SSL"
+  sasl.mechanism: "PLAIN"
+  sasl.username: 'YOUR_CONFLUENT_CLOUD_API_KEY'
+  sasl.password: 'YOUR_CONFLUENT_CLOUD_API_SECRET'
+  schema_registry_url: 'YOUR_SCHEMA_REGISTRY_URL'
+  schema_registry_api_key: 'YOUR_SCHEMA_REGISTRY_API_KEY'
+  schema_registry_secret: 'YOUR_SCHEMA_REGISTRY_SECRET'
+  topics:
+    positions: "f1_driver_positions"
+    driver_avg_speed: "driver_avg_speed"
+  consumer_group: "f1-leaderboard-consumer"
