@@ -45,7 +45,8 @@ python3 -m venv test_env && rm -rf test_env
 
 ### Step 1.1: Clone the Repository and navigate to backend direcory
 ```bash
-git clone https://github.com/kos-conf/f1-leaderboard-workshop.git && cd f1-leaderboard-workshop/backend
+git clone https://github.com/confluentinc/confluent-workshops.git
+cd confluent-workshops/workshop/f1-leaderboard-workshop/backend
 ```
 
 ### Step 1.2: Set Up Backend Environment
