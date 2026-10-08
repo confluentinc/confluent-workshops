@@ -1,11 +1,11 @@
-fastapi==0.141.1
-uvicorn[standard]==0.52.3
+fastapi==0.142.2
+uvicorn[standard]==0.54.0
 jinja2==3.1.6
-sqlalchemy==2.0.52
-psycopg2-binary==2.9.12
+sqlalchemy==2.1.1
+psycopg2-binary==2.9.13
 confluent-kafka==2.12.1
 python-multipart==0.0.32
-boto3==1.43.73
+boto3==1.43.106
 pandas==2.3.3
 plotly==5.24.1
-python-dotenv==1.2.3 
+python-dotenv==1.2.4 
